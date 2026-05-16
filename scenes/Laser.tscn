@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://d1k7j4m8w2b1p"]
+
+[ext_resource type="Script" path="res://scripts/Laser.gd" id="1_script"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
+size = Vector2(40, 4)
+
+[node name="Laser" type="Area2D"]
+script = ExtResource("1_script")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_1")
+
+[node name="Visual" type="ColorRect" parent="."]
+offset_left = -20.0
+offset_top = -2.0
+offset_right = 20.0
+offset_bottom = 2.0
+color = Color(1, 0.2, 0.2, 1)
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

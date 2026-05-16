@@ -1,0 +1,24 @@
+# Godot-specific ignores
+.godot/
+
+# Mono-specific ignores
+.mono/
+data_*/
+mono_crash_*.log
+
+# Windows-specific ignores
+Thumbs.db
+desktop.ini
+
+# MacOS-specific ignores
+.DS_Store
+
+# Export-specific ignores
+export_presets.cfg
+*.html
+*.js
+*.wasm
+*.pck
+*.exe
+*.apk
+*.ipa
