@@ -27,6 +27,11 @@ func _physics_process(delta):
 	
 	global_position += velocity * delta
 	rotation = velocity.angle()
+	
+	# DISTANCE SCALING (Shrink as it gets closer to the black hole)
+	var distance = to_center.length()
+	var base_scale = clamp(distance / 500.0, 0.2, 1.0)
+	scale = Vector2(base_scale, base_scale)
 
 func _on_body_entered(body):
 	if body.name == "Player":

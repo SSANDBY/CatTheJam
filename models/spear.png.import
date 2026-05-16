@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c5ppv8llbqe6g"
-path="res://.godot/imported/blackhole.png-96e1783ffc6cbe9275c9a1eb59bada52.ctex"
+uid="uid://vmb4l1uf77b4"
+path="res://.godot/imported/spear.png-df5f2d08920469db28f675ae1d4de459.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://models/blackhole.png"
-dest_files=["res://.godot/imported/blackhole.png-96e1783ffc6cbe9275c9a1eb59bada52.ctex"]
+source_file="res://models/spear.png"
+dest_files=["res://.godot/imported/spear.png-df5f2d08920469db28f675ae1d4de459.ctex"]
 
 [params]
 

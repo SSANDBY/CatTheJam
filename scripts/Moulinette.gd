@@ -22,6 +22,12 @@ func _process(delta):
 	# Rotate towards player
 	look_at(player.global_position)
 	
+	# DISTANCE SCALING (Consistent with Norminette)
+	var to_center = Vector2(640, 360) - global_position
+	var distance = to_center.length()
+	var base_scale = clamp(distance / 500.0, 0.2, 1.0)
+	scale = Vector2(base_scale, base_scale)
+	
 	timer -= delta
 	if timer <= 0:
 		if not is_aiming:

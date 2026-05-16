@@ -7,8 +7,10 @@
 [ext_resource type="PackedScene" uid="uid://wadyblkbrr4w" path="res://scenes/AstronautModel.tscn" id="5_scene"]
 [ext_resource type="Script" uid="uid://bu6e0v87m37qw" path="res://scripts/GameManager.gd" id="8_script"]
 [ext_resource type="Texture2D" uid="uid://b0uuv3yrajbsi" path="res://models/circle.png" id="9_texture"]
-[ext_resource type="Texture2D" uid="uid://3ahl37h1ppoj" path="res://models/blackhole.png" id="10_texture"]
+[ext_resource type="Texture2D" uid="uid://c5ppv8llbqe6g" path="res://models/blackhole.png" id="10_texture"]
 [ext_resource type="Script" uid="uid://bh3e5sxbtbpym" path="res://scripts/BlackHole.gd" id="11_script"]
+[ext_resource type="Texture2D" uid="uid://vmb4l1uf77b4" path="res://models/spear.png" id="12_texture"]
+[ext_resource type="Texture2D" uid="uid://blqhlqf2ask77" path="res://models/bubble.png" id="13_texture"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1"]
 radius = 20.0
@@ -98,25 +100,20 @@ tilt_speed = 10.0
 
 [node name="SwordArea" type="Area2D" parent="Player" unique_id=992390531]
 visible = false
-position = Vector2(30, 0)
+position = Vector2(50, 0)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player/SwordArea" unique_id=1400827970]
 shape = SubResource("RectangleShape2D_sword")
 
-[node name="Visual" type="ColorRect" parent="Player/SwordArea" unique_id=1857944419]
-offset_left = -10.0
-offset_top = -25.0
-offset_right = 10.0
-offset_bottom = 25.0
-color = Color(0.9, 0.9, 0.2, 1)
+[node name="Visual" type="Sprite2D" parent="Player/SwordArea" unique_id=1857944419]
+rotation = 3.14159
+scale = Vector2(0.04, 0.04)
+texture = ExtResource("12_texture")
 
-[node name="ShieldVisual" type="ColorRect" parent="Player" unique_id=956031933]
+[node name="ShieldVisual" type="Sprite2D" parent="Player" unique_id=956031933]
 visible = false
-offset_left = -30.0
-offset_top = -30.0
-offset_right = 30.0
-offset_bottom = 30.0
-color = Color(0.2, 1, 0.2, 0.3)
+scale = Vector2(1.1, 1.1)
+texture = ExtResource("13_texture")
 
 [node name="Instructions" type="Label" parent="." unique_id=465913768]
 offset_left = 20.0
