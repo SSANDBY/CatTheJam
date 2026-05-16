@@ -5,9 +5,8 @@
 [ext_resource type="PackedScene" uid="uid://d3y7j4m8w2b1p" path="res://scenes/HUD.tscn" id="3_scene"]
 [ext_resource type="Script" uid="uid://dcagcejogac2k" path="res://scripts/Proxy3D.gd" id="4_script"]
 [ext_resource type="PackedScene" uid="uid://wadyblkbrr4w" path="res://scenes/AstronautModel.tscn" id="5_scene"]
-[ext_resource type="Texture2D" uid="uid://ck0f6o6dswoqr" path="res://models/blackhole.png" id="6_texture"]
-[ext_resource type="Script" uid="uid://bh3e5sxbtbpym" path="res://scripts/BlackHole.gd" id="7_script"]
 [ext_resource type="Script" uid="uid://bu6e0v87m37qw" path="res://scripts/GameManager.gd" id="8_script"]
+[ext_resource type="Texture2D" uid="uid://b0uuv3yrajbsi" path="res://models/circle.png" id="9_texture"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1"]
 radius = 20.0
@@ -23,22 +22,12 @@ offset_left = -2000.0
 offset_top = -2000.0
 offset_right = 3280.0
 offset_bottom = 2720.0
-color = Color(0.0509804, 0.0509804, 0.0784314, 1)
+color = Color(0, 0, 0, 1)
 
-[node name="BlackHole" type="Node2D" parent="." unique_id=1224910423]
-position = Vector2(640, 360)
-script = ExtResource("7_script")
-
-[node name="OrbitVisual" type="ColorRect" parent="BlackHole" unique_id=1610170625]
-offset_left = -220.0
-offset_top = -220.0
-offset_right = 220.0
-offset_bottom = 220.0
-color = Color(1, 1, 1, 0.03)
-
-[node name="VisualSprite" type="Sprite2D" parent="BlackHole" unique_id=952501994]
-scale = Vector2(2, 2)
-texture = ExtResource("6_texture")
+[node name="CenterCircle" type="Sprite2D" parent="." unique_id=20260516]
+position = Vector2(654, 371)
+scale = Vector2(0.4832536, 0.4832536)
+texture = ExtResource("9_texture")
 
 [node name="View3DContainer" type="SubViewportContainer" parent="." unique_id=1815060349]
 texture_filter = 1
@@ -83,8 +72,6 @@ color = Color(0.2, 0.6, 1, 1)
 script = ExtResource("4_script")
 model_scene = ExtResource("5_scene")
 rotation_offset = 1.5708
-follow_2d_rotation = true
-tilt_amount = 0.0
 tilt_speed = 10.0
 
 [node name="SwordArea" type="Area2D" parent="Player" unique_id=992390531]
