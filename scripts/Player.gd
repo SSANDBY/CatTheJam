@@ -120,11 +120,6 @@ func _physics_process(delta):
 	
 	move_and_slide()
 	apply_constraints()
-	
-	# Sync 3D Camera with player position
-	if camera_3d:
-		camera_3d.global_position.x = global_position.x
-		camera_3d.global_position.y = -global_position.y
 
 func apply_constraints():
 	var to_center = black_hole_pos - global_position
@@ -156,6 +151,12 @@ func start_attack():
 func stop_attack():
 	is_attacking = false
 	attack_cooldown_timer = sword_cooldown
+	sword_area.monitoring = false
+	sword_area.visible = false
+
+func _on_sword_area_area_entered(area):
+	if area.is_in_group("norminettes"):
+		area.queue_free()
 	sword_area.monitoring = false
 	sword_area.visible = false
 
