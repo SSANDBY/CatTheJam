@@ -11,6 +11,7 @@
 [ext_resource type="Script" uid="uid://bh3e5sxbtbpym" path="res://scripts/BlackHole.gd" id="11_script"]
 [ext_resource type="Texture2D" uid="uid://vmb4l1uf77b4" path="res://models/spear.png" id="12_texture"]
 [ext_resource type="Texture2D" uid="uid://blqhlqf2ask77" path="res://models/bubble.png" id="13_texture"]
+[ext_resource type="Script" path="res://scripts/CameraFollow.gd" id="14_script"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1"]
 radius = 20.0
@@ -26,10 +27,10 @@ script = ExtResource("14_script")
 target_node_path = NodePath("../Player")
 
 [node name="Background" type="ColorRect" parent="." unique_id=1627544341]
-offset_left = -2000.0
-offset_top = -2000.0
-offset_right = 3280.0
-offset_bottom = 2720.0
+offset_left = -5000.0
+offset_top = -5000.0
+offset_right = 5000.0
+offset_bottom = 5000.0
 color = Color(0, 0, 0, 1)
 
 [node name="CenterCircle" type="Sprite2D" parent="." unique_id=20260516]
@@ -85,9 +86,6 @@ shadow_enabled = true
 [node name="Player" type="CharacterBody2D" parent="." unique_id=1483899058]
 position = Vector2(200, 200)
 script = ExtResource("1_script")
-
-[node name="Camera2D" type="Camera2D" parent="Player" unique_id=20260517]
-ignore_rotation = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player" unique_id=20824136]
 shape = SubResource("CircleShape2D_1")
