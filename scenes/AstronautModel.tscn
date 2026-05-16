@@ -1,7 +1,8 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://wadyblkbrr4w"]
+
 [ext_resource type="PackedScene" uid="uid://cvmstpx0i6pj7" path="res://models/Astronaut.glb" id="1_glb"]
 
-[node name="AstronautModel" type="Node3D"]
+[node name="AstronautModel" type="Node3D" unique_id=154294413]
 
-[node name="Astronaut" parent="." instance=ExtResource("1_glb")]
-transform = Transform3D(50, 0, 0, 0, 50, 0, 0, 0, 50, 0, 0, 0)
+[node name="Astronaut" parent="." unique_id=1717928962 instance=ExtResource("1_glb")]
+transform = Transform3D(49.967777, 0, 1.7946854, 0, 49.999992, 0, -1.7946854, 0, 49.967777, 0, 0, 0)

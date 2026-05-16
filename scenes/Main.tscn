@@ -4,8 +4,8 @@
 [ext_resource type="Script" uid="uid://x6fuq2rcek6i" path="res://scripts/Spawner.gd" id="2_script"]
 [ext_resource type="PackedScene" uid="uid://d3y7j4m8w2b1p" path="res://scenes/HUD.tscn" id="3_scene"]
 [ext_resource type="Script" uid="uid://dcagcejogac2k" path="res://scripts/Proxy3D.gd" id="4_script"]
-[ext_resource type="PackedScene" path="res://scenes/AstronautModel.tscn" id="5_scene"]
-[ext_resource type="Texture2D" uid="uid://cwi20gpywi316" path="res://models/blackhole.png" id="6_texture"]
+[ext_resource type="PackedScene" uid="uid://wadyblkbrr4w" path="res://scenes/AstronautModel.tscn" id="5_scene"]
+[ext_resource type="Texture2D" uid="uid://ck0f6o6dswoqr" path="res://models/blackhole.png" id="6_texture"]
 [ext_resource type="Script" uid="uid://bh3e5sxbtbpym" path="res://scripts/BlackHole.gd" id="7_script"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1"]
@@ -36,7 +36,7 @@ color = Color(1, 1, 1, 0.03)
 
 [node name="VisualSprite" type="Sprite2D" parent="BlackHole" unique_id=377493560]
 position = Vector2(0, -13)
-scale = Vector2(1.03, 1.03)
+scale = Vector2(2, 2)
 texture = ExtResource("6_texture")
 
 [node name="View3DContainer" type="SubViewportContainer" parent="." unique_id=1585799]
@@ -53,8 +53,8 @@ render_target_update_mode = 4
 
 [node name="World3D" type="Node3D" parent="View3DContainer/SubViewport" unique_id=859447249]
 
-[node name="Camera3D" type="Camera3D" parent="View3DContainer/SubViewport/World3D" unique_id=688879969]
-transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 640, 500, 860)
+[node name="Camera3D" type="Camera3D" parent="View3DContainer/SubViewport/World3D" unique_id=520407790]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 640, -360, 1000)
 projection = 1
 size = 720.0
 far = 5000.0
@@ -78,9 +78,12 @@ offset_right = 20.0
 offset_bottom = 20.0
 color = Color(0.2, 0.6, 1, 1)
 
-[node name="Proxy3D" type="Node" parent="Player" unique_id=437377692]
+[node name="Proxy3D" type="Node" parent="Player" unique_id=151040637]
 script = ExtResource("4_script")
 model_scene = ExtResource("5_scene")
+rotation_offset = 3.14159
+follow_2d_rotation = false
+tilt_amount = 0.4
 
 [node name="SwordArea" type="Area2D" parent="Player" unique_id=1011225335]
 visible = false
