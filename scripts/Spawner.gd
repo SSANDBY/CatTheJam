@@ -55,8 +55,8 @@ func spawn_norminette(time_factor):
 func spawn_moulinette():
 	if not moulinette_scene: return
 	var moulinette = moulinette_scene.instantiate()
-	# Spawn Moulinette at a random point on a large circle outside the orbit
+	# Spawn Moulinette at a random point on a circle within view
 	var angle = randf() * TAU
-	var spawn_dist = 600.0
+	var spawn_dist = 320.0
 	moulinette.global_position = Vector2(640, 360) + Vector2.RIGHT.rotated(angle) * spawn_dist
 	get_parent().add_child(moulinette)

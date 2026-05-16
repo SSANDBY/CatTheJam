@@ -1,8 +1,8 @@
 extends Node
 
 @export var model_scene: PackedScene
-# Bu offset, modelin .glb içindeki yönüne göre değişir.
-# -p.rotation + 1.5708 formülü ile Sağ=Sağ, Sol=Sol, Aşağı=Ön, Yukarı=Arka olmasını sağlar.
+# 45 derecelik kamera açısında (sin(45) = 0.707) 
+# 2D Y ekseniyle 3D Z eksenini eşitlemek için gereken offset.
 @export var rotation_offset: float = 1.5708
 var proxy: Node3D
 
@@ -21,10 +21,15 @@ func _ready():
 func _process(_delta):
 	if proxy and get_parent() is Node2D:
 		var p = get_parent()
-		proxy.global_position = Vector3(p.global_position.x, 0, p.global_position.y)
 		
-		# Matematiksel Kesin Çözüm:
-		# 2D rotasyonun tersini alıp offset ekliyoruz.
+		# PERSPEKTİF KOMPANZASYONU:
+		# 45 derecelik açıda Z ekseni ekranda sin(45) kadar kısalır.
+		# 2D'deki Y pozisyonunun 3D'de tam aynı yere düşmesi için 
+		# Z değerini sin(45)'e bölerek (yaklaşık 1.414 ile çarparak) genişletiyoruz.
+		var corrected_z = p.global_position.y / 0.707107
+		proxy.global_position = Vector3(p.global_position.x, 0, corrected_z)
+		
+		# Rotasyon (Yön) eşlemesi
 		proxy.rotation.y = -p.rotation + rotation_offset
 
 func _exit_tree():
