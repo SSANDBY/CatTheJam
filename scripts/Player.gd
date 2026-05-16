@@ -40,6 +40,7 @@ func _physics_process(delta):
 		if dash_timer <= 0:
 			is_dashing = false
 		move_and_slide()
+		apply_constraints()
 		return
 
 	# Shield logic (Right Click or K)
@@ -96,15 +97,8 @@ func _physics_process(delta):
 	
 	# Gravity Logic
 	var to_center = black_hole_pos - global_position
-	var distance = to_center.length()
-	var distance_sq = distance * distance
+	var distance_sq = to_center.length_squared()
 	
-	# RESTRICTION ZONE
-	if distance < min_orbit_radius:
-		global_position = black_hole_pos - to_center.normalized() * min_orbit_radius
-		if velocity.dot(to_center) > 0:
-			velocity -= velocity.project(to_center)
-
 	# Scale gravity with score
 	var score_factor = 1.0 + (hud.score * 0.02) if hud else 1.0
 	var gravity_force = (to_center.normalized() * gravity_constant * score_factor) / max(distance_sq, 1000.0)
@@ -112,13 +106,23 @@ func _physics_process(delta):
 	velocity += total_pull * delta
 	
 	move_and_slide()
+	apply_constraints()
+
+func apply_constraints():
+	var to_center = black_hole_pos - global_position
+	var distance = to_center.length()
 	
-	# ORBIT CONSTRAINT
-	var final_to_center = black_hole_pos - global_position
-	if final_to_center.length() > max_orbit_radius:
-		global_position = black_hole_pos - final_to_center.normalized() * max_orbit_radius
-		if velocity.dot(-final_to_center) < 0:
-			velocity -= velocity.project(-final_to_center)
+	# RESTRICTION ZONE (MIN RADIUS)
+	if distance < min_orbit_radius:
+		global_position = black_hole_pos - to_center.normalized() * min_orbit_radius
+		if velocity.dot(to_center) > 0:
+			velocity -= velocity.project(to_center)
+	
+	# ORBIT CONSTRAINT (MAX RADIUS)
+	if distance > max_orbit_radius:
+		global_position = black_hole_pos - to_center.normalized() * max_orbit_radius
+		if velocity.dot(-to_center) < 0:
+			velocity -= velocity.project(-to_center)
 
 func start_dash(direction):
 	is_dashing = true
