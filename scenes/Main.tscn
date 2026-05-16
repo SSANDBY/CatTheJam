@@ -1,8 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://c6y7j4m8w2b1p"]
+[gd_scene load_steps=8 format=3 uid="uid://c6y7j4m8w2b1p"]
 
-[ext_resource type="Script" path="res://scripts/Player.gd" id="1_script"]
-[ext_resource type="Script" path="res://scripts/Spawner.gd" id="2_script"]
+[ext_resource type="Script" uid="uid://cc2lj2ogn6ufb" path="res://scripts/Player.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://x6fuq2rcek6i" path="res://scripts/Spawner.gd" id="2_script"]
 [ext_resource type="PackedScene" uid="uid://d3y7j4m8w2b1p" path="res://scenes/HUD.tscn" id="3_scene"]
+[ext_resource type="Script" uid="uid://dcagcejogac2k" path="res://scripts/Proxy3D.gd" id="4_script"]
+[ext_resource type="PackedScene" path="res://scenes/AstronautModel.tscn" id="5_scene"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1"]
 radius = 20.0
@@ -16,6 +18,31 @@ size = Vector2(20, 50)
 offset_right = 1280.0
 offset_bottom = 720.0
 color = Color(0.0509804, 0.0509804, 0.0784314, 1)
+
+[node name="View3DContainer" type="SubViewportContainer" parent="."]
+texture_filter = 1
+offset_right = 1280.0
+offset_bottom = 720.0
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="View3DContainer"]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(1280, 720)
+render_target_update_mode = 4
+
+[node name="World3D" type="Node3D" parent="View3DContainer/SubViewport"]
+
+[node name="Camera3D" type="Camera3D" parent="View3DContainer/SubViewport/World3D"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 640, 500, 500)
+projection = 1
+size = 720.0
+far = 2000.0
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="View3DContainer/SubViewport/World3D"]
+transform = Transform3D(0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, -0.75, 0.433013, 0, 10, 0)
+light_energy = 2.0
+shadow_enabled = true
 
 [node name="BlackHole" type="Node2D" parent="."]
 position = Vector2(640, 360)
@@ -47,6 +74,11 @@ offset_top = -20.0
 offset_right = 20.0
 offset_bottom = 20.0
 color = Color(0.2, 0.6, 1, 1)
+
+[node name="Proxy3D" type="Node" parent="Player"]
+script = ExtResource("4_script")
+model_scene = ExtResource("5_scene")
+rotation_offset = 1.5708
 
 [node name="SwordArea" type="Area2D" parent="Player"]
 visible = false

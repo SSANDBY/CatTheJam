@@ -1,6 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://b7n8r5y4m2b1p"]
+[gd_scene load_steps=4 format=3 uid="uid://b7n8r5y4m2b1p"]
 
 [ext_resource type="Script" path="res://scripts/Norminette.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://dcagcejogac2k" path="res://scripts/Proxy3D.gd" id="2_script"]
+[ext_resource type="PackedScene" path="res://scenes/NorminetteModel.tscn" id="3_scene"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
 size = Vector2(30, 30)
@@ -17,5 +19,10 @@ offset_top = -15.0
 offset_right = 15.0
 offset_bottom = 15.0
 color = Color(0.8, 0.2, 0.2, 1)
+
+[node name="Proxy3D" type="Node" parent="."]
+script = ExtResource("2_script")
+model_scene = ExtResource("3_scene")
+rotation_offset = 1.5708
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

@@ -26,6 +26,7 @@ func _physics_process(delta):
 		queue_free()
 	
 	global_position += velocity * delta
+	rotation = velocity.angle()
 
 func _on_body_entered(body):
 	if body.name == "Player":

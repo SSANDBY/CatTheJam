@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3]
+[ext_resource type="PackedScene" uid="uid://50rn4nr7ybt8" path="res://models/Norminette.glb" id="1_glb"]
+
+[node name="NorminetteModel" type="Node3D"]
+
+[node name="Norminette" parent="." instance=ExtResource("1_glb")]
+transform = Transform3D(30, 0, 0, 0, 30, 0, 0, 0, 30, 0, 0, 0)
