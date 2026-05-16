@@ -3,7 +3,7 @@ extends Camera2D
 @export var target_node_path: NodePath
 @export var smooth_speed: float = 10.0
 @onready var target = get_node_or_null(target_node_path)
-@onready var camera_3d = get_parent().find_child("Camera3D", true, false)
+@onready var camera_3d = get_tree().root.find_child("Camera3D", true, false)
 
 func _process(delta):
 	if not target:
