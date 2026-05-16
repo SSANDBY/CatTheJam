@@ -58,7 +58,10 @@ scale_amount_min = 0.2
 scale_amount_max = 1.5
 color = Color(1, 1, 1, 0.6)
 
-[node name="View3DContainer" type="SubViewportContainer" parent="." unique_id=1815060349]
+[node name="View3DLayer" type="CanvasLayer" parent="." unique_id=20260518]
+layer = -1
+
+[node name="View3DContainer" type="SubViewportContainer" parent="View3DLayer" unique_id=1815060349]
 texture_filter = 1
 offset_right = 1280.0
 offset_bottom = 720.0

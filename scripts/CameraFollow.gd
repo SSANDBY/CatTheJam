@@ -15,5 +15,7 @@ func _process(delta):
 	
 	# Sync 3D Camera with 2D position
 	if camera_3d:
+		# Use target.global_position or global_position? 
+		# Better to use camera's own global_position to keep 2D and 3D views perfectly matched
 		camera_3d.global_position.x = global_position.x
 		camera_3d.global_position.y = -global_position.y
