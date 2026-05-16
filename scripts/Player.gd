@@ -9,7 +9,7 @@ extends CharacterBody2D
 # Orbit & Gravity Variables
 var black_hole_pos = Vector2(640, 360) 
 var gravity_constant = 8000000.0
-var ambient_pull = 350.0 
+var ambient_pull = 200.0 
 var max_orbit_radius = 2000.0
 @export var target_max_orbit_radius = 220.0
 @export var min_orbit_radius = 45.0 
@@ -151,12 +151,6 @@ func start_attack():
 func stop_attack():
 	is_attacking = false
 	attack_cooldown_timer = sword_cooldown
-	sword_area.monitoring = false
-	sword_area.visible = false
-
-func _on_sword_area_area_entered(area):
-	if area.is_in_group("norminettes"):
-		area.queue_free()
 	sword_area.monitoring = false
 	sword_area.visible = false
 
