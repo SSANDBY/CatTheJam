@@ -21,6 +21,10 @@ size = Vector2(20, 50)
 [node name="Main" type="Node2D" unique_id=198621965]
 script = ExtResource("8_script")
 
+[node name="MainCamera" type="Camera2D" parent="." unique_id=20260517]
+script = ExtResource("14_script")
+target_node_path = NodePath("../Player")
+
 [node name="Background" type="ColorRect" parent="." unique_id=1627544341]
 offset_left = -2000.0
 offset_top = -2000.0

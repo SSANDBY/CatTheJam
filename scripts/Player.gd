@@ -30,7 +30,6 @@ var shield_energy = 100.0
 @onready var sword_area = $SwordArea
 @onready var shield_visual = $ShieldVisual
 @onready var hud = get_parent().get_node_or_null("HUD")
-@onready var camera_3d = get_parent().find_child("Camera3D", true, false)
 
 func _ready():
 	sword_area.monitoring = false
@@ -161,5 +160,8 @@ func stop_attack():
 	sword_area.visible = false
 
 func _on_sword_area_area_entered(area):
+	if area.is_in_group("norminettes"):
+		area.queue_free()
+a_entered(area):
 	if area.is_in_group("norminettes"):
 		area.queue_free()
