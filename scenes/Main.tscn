@@ -13,6 +13,8 @@
 [ext_resource type="Texture2D" uid="uid://blqhlqf2ask77" path="res://models/bubble.png" id="13_texture"]
 [ext_resource type="Script" path="res://scripts/CameraFollow.gd" id="14_script"]
 
+[ext_resource type="Script" path="res://scripts/MeteorParticles.gd" id="15_script"]
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_1"]
 radius = 20.0
 
@@ -34,6 +36,8 @@ offset_bottom = 5000.0
 color = Color(0, 0, 0, 1)
 
 [node name="Meteors" type="CPUParticles2D" parent="."]
+z_index = 10
+script = ExtResource("15_script")
 position = Vector2(640, 360)
 amount = 40
 lifetime = 20.0
@@ -45,8 +49,8 @@ spread = 20.0
 gravity = Vector2(0, 0)
 initial_velocity_min = 50.0
 initial_velocity_max = 200.0
-scale_amount_min = 3.0
-scale_amount_max = 8.0
+scale_amount_min = 0.2
+scale_amount_max = 0.6
 color = Color(0.55, 0.45, 0.4, 0.7)
 
 [node name="CenterCircle" type="Sprite2D" parent="." unique_id=20260516]
@@ -70,8 +74,8 @@ preprocess = 10.0
 emission_shape = 3
 emission_rect_extents = Vector2(5000, 5000)
 gravity = Vector2(0, 0)
-scale_amount_min = 0.2
-scale_amount_max = 1.5
+scale_amount_min = 1.0
+scale_amount_max = 3.0
 color = Color(1, 1, 1, 0.6)
 
 [node name="View3DLayer" type="CanvasLayer" parent="." unique_id=20260518]
