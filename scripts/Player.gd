@@ -74,6 +74,15 @@ func _physics_process(delta):
 	# Input handling
 	var input_vector = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	
+	# Rotation Logic
+	var target_rotation = -PI/2 # Default: Facing "Up/Back"
+	if input_vector != Vector2.ZERO:
+		target_rotation = input_vector.angle()
+	
+	# Smoothly interpolate rotation (rotation_speed can be adjusted)
+	var rotation_speed = 10.0
+	rotation = lerp_angle(rotation, target_rotation, rotation_speed * delta)
+
 	# Dash check
 	if Input.is_action_just_pressed("dash") and input_vector != Vector2.ZERO:
 		start_dash(input_vector)
@@ -82,7 +91,6 @@ func _physics_process(delta):
 	# Movement logic with inertia
 	if input_vector != Vector2.ZERO:
 		velocity = velocity.move_toward(input_vector * speed, acceleration * delta)
-		rotation = velocity.angle()
 	else:
 		velocity = velocity.move_toward(Vector2.ZERO, friction * delta)
 	

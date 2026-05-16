@@ -45,11 +45,13 @@ func _process(delta):
 			# TILT ETKİSİ
 			if tilt_amount != 0.0:
 				var target_tilt = 0.0
-				var velocity_x = 0.0
-				if "velocity" in p:
-					velocity_x = p.velocity.x
+				var input_x = Input.get_axis("move_left", "move_right")
 				
-				target_tilt = clamp(velocity_x / 400.0, -1.0, 1.0) * tilt_amount
+				if input_x != 0:
+					target_tilt = input_x * tilt_amount
+				elif "velocity" in p:
+					target_tilt = clamp(p.velocity.x / 400.0, -1.0, 1.0) * tilt_amount
+				
 				current_tilt = lerp(current_tilt, target_tilt, delta * tilt_speed)
 				proxy.rotation.z = current_tilt
 
