@@ -18,5 +18,5 @@ rotation_offset = 3.14159
 
 [node name="WarningLine" type="Line2D" parent="."]
 points = PackedVector2Array(0, 0, 1000, 0)
-width = 1.0
-default_color = Color(1, 0, 0, 0.3)
+width = 4.0
+default_color = Color(1, 0, 0, 0.4)
