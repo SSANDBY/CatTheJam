@@ -162,6 +162,3 @@ func stop_attack():
 func _on_sword_area_area_entered(area):
 	if area.is_in_group("norminettes"):
 		area.queue_free()
-a_entered(area):
-	if area.is_in_group("norminettes"):
-		area.queue_free()
