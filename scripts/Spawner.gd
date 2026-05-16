@@ -35,19 +35,13 @@ func spawn_norminette(time_factor):
 	if norminette.has_method("set_difficulty"):
 		norminette.set_difficulty(time_factor)
 
-	var side = randi() % 4
-	var spawn_pos = Vector2.ZERO
-
-	match side:
-		0: # Top
-			spawn_pos = Vector2(randf_range(0, 1280), -50)
-		1: # Bottom
-			spawn_pos = Vector2(randf_range(0, 1280), 770)
-		2: # Left
-			spawn_pos = Vector2(-50, randf_range(0, 720))
-		3: # Right
-			spawn_pos = Vector2(1330, randf_range(0, 720))
-
+	var player = get_tree().root.find_child("Player", true, false)
+	var spawn_radius = 2000.0 # Fallback default
+	if player and "max_orbit_radius" in player:
+		spawn_radius = player.max_orbit_radius + 150.0
+		
+	var angle = randf() * TAU
+	var spawn_pos = Vector2(640, 360) + Vector2.RIGHT.rotated(angle) * spawn_radius
 	norminette.global_position = spawn_pos
 	get_parent().add_child(norminette)
 
