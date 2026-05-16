@@ -7,6 +7,8 @@
 [ext_resource type="PackedScene" uid="uid://wadyblkbrr4w" path="res://scenes/AstronautModel.tscn" id="5_scene"]
 [ext_resource type="Script" uid="uid://bu6e0v87m37qw" path="res://scripts/GameManager.gd" id="8_script"]
 [ext_resource type="Texture2D" uid="uid://b0uuv3yrajbsi" path="res://models/circle.png" id="9_texture"]
+[ext_resource type="Texture2D" uid="uid://3ahl37h1ppoj" path="res://models/blackhole.png" id="10_texture"]
+[ext_resource type="Script" uid="uid://bh3e5sxbtbpym" path="res://scripts/BlackHole.gd" id="11_script"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1"]
 radius = 20.0
@@ -25,9 +27,17 @@ offset_bottom = 2720.0
 color = Color(0, 0, 0, 1)
 
 [node name="CenterCircle" type="Sprite2D" parent="." unique_id=20260516]
-position = Vector2(654, 371)
-scale = Vector2(0.4832536, 0.4832536)
+position = Vector2(640, 360)
+scale = Vector2(0.5, 0.5)
 texture = ExtResource("9_texture")
+
+[node name="BlackHole" type="Node2D" parent="." unique_id=1224910423]
+position = Vector2(640, 360)
+script = ExtResource("11_script")
+
+[node name="VisualSprite" type="Sprite2D" parent="BlackHole" unique_id=952501994]
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("10_texture")
 
 [node name="View3DContainer" type="SubViewportContainer" parent="." unique_id=1815060349]
 texture_filter = 1
