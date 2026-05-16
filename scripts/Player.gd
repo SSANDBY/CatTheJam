@@ -120,6 +120,11 @@ func _physics_process(delta):
 	
 	move_and_slide()
 	apply_constraints()
+	
+	# Sync 3D Camera with player position
+	if camera_3d:
+		camera_3d.global_position.x = global_position.x
+		camera_3d.global_position.y = -global_position.y
 
 func apply_constraints():
 	var to_center = black_hole_pos - global_position

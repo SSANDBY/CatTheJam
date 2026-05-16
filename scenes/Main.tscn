@@ -82,6 +82,9 @@ shadow_enabled = true
 position = Vector2(200, 200)
 script = ExtResource("1_script")
 
+[node name="Camera2D" type="Camera2D" parent="Player" unique_id=20260517]
+ignore_rotation = false
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player" unique_id=20824136]
 shape = SubResource("CircleShape2D_1")
 
@@ -115,7 +118,12 @@ visible = false
 scale = Vector2(1.1, 1.1)
 texture = ExtResource("13_texture")
 
-[node name="Instructions" type="Label" parent="." unique_id=465913768]
+[node name="Spawner" type="Node2D" parent="." unique_id=1967464532]
+script = ExtResource("2_script")
+
+[node name="HUD" parent="." unique_id=218797780 instance=ExtResource("3_scene")]
+
+[node name="Instructions" type="Label" parent="HUD" unique_id=465913768]
 offset_left = 20.0
 offset_top = 20.0
 offset_right = 400.0
@@ -124,10 +132,5 @@ text = "INFINITE DESCENT PROTOTYPE
 WASD: Move | Space: Dash
 Left Click / J: Sword (1s Use, 3s Cooldown) | Right Click / K: Shield
 Norminette: Avoid | Moulinette: Dodge Laser!"
-
-[node name="Spawner" type="Node2D" parent="." unique_id=1967464532]
-script = ExtResource("2_script")
-
-[node name="HUD" parent="." unique_id=218797780 instance=ExtResource("3_scene")]
 
 [connection signal="area_entered" from="Player/SwordArea" to="Player" method="_on_sword_area_area_entered"]
