@@ -26,6 +26,18 @@ offset_right = 3280.0
 offset_bottom = 2720.0
 color = Color(0, 0, 0, 1)
 
+[node name="Stars" type="CPUParticles2D" parent="." unique_id=123456789]
+position = Vector2(640, 360)
+amount = 1200
+lifetime = 10.0
+preprocess = 10.0
+emission_shape = 3
+emission_rect_extents = Vector2(1200, 1000)
+gravity = Vector2(0, 0)
+scale_amount_min = 0.2
+scale_amount_max = 1.5
+color = Color(1, 1, 1, 0.6)
+
 [node name="CenterCircle" type="Sprite2D" parent="." unique_id=20260516]
 position = Vector2(640, 360)
 scale = Vector2(0.5, 0.5)
