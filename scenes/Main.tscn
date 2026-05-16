@@ -35,7 +35,8 @@ offset_bottom = 220.0
 color = Color(1, 1, 1, 0.03)
 
 [node name="VisualSprite" type="Sprite2D" parent="BlackHole" unique_id=377493560]
-scale = Vector2(1.0446571, 1.0446571)
+position = Vector2(0, -13)
+scale = Vector2(1.03, 1.03)
 texture = ExtResource("6_texture")
 
 [node name="View3DContainer" type="SubViewportContainer" parent="." unique_id=1585799]
