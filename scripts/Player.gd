@@ -58,9 +58,9 @@ func _physics_process(delta):
 		hud.update_energy(shield_energy, shield_max_energy)
 		
 		# Update dynamic max_orbit_radius based on score
-		# Shrinks from 2000 to 220 between score 0 and 150
+		# Shrinks from 10000 to 220 between score 0 and 150
 		var score_progress = clamp(hud.score / 150.0, 0.0, 1.0)
-		max_orbit_radius = lerp(2000.0, target_max_orbit_radius, score_progress)
+		max_orbit_radius = lerp(10000.0, target_max_orbit_radius, score_progress)
 		
 		# Update CenterCircle visual
 		var center_circle = get_parent().get_node_or_null("CenterCircle")
