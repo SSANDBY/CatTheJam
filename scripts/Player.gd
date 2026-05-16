@@ -55,6 +55,18 @@ func _physics_process(delta):
 	
 	if hud:
 		hud.update_energy(shield_energy, shield_max_energy)
+		
+		# Update dynamic max_orbit_radius based on score
+		# Shrinks from 2000 to 220 between score 0 and 150
+		var score_progress = clamp(hud.score / 150.0, 0.0, 1.0)
+		max_orbit_radius = lerp(2000.0, target_max_orbit_radius, score_progress)
+		
+		# Update CenterCircle visual
+		var center_circle = get_parent().get_node_or_null("CenterCircle")
+		if center_circle:
+			# Current scale 0.5 corresponds to target_max_orbit_radius (220)
+			var current_scale = (max_orbit_radius / target_max_orbit_radius) * 0.5
+			center_circle.scale = Vector2(current_scale, current_scale)
 
 	# Attack logic (Left Click or J)
 	if attack_cooldown_timer > 0:
