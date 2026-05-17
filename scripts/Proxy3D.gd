@@ -17,7 +17,12 @@ func _ready():
 	var world = get_tree().root.find_child("World3D", true, false)
 	if world and model_scene:
 		proxy = model_scene.instantiate()
+		if not proxy:
+			push_error("Proxy3D: Failed to instantiate model_scene!")
+			return
+			
 		world.add_child(proxy)
+		print("Proxy3D: Model instantiated successfully: ", proxy.name)
 		
 		# Animasyon Yönetimi
 		var anim = proxy.find_child("AnimationPlayer", true, false)
@@ -25,16 +30,15 @@ func _ready():
 			var target_anim = ""
 			var anim_list = anim.get_animation_list()
 			
-			# Öncelik sırası: walk/run, sonra idle
-			for anim_name in anim_list:
-				var low_name = anim_name.to_lower()
-				if low_name.contains("walk") or low_name.contains("run"):
-					target_anim = anim_name
-					break
+			# 1. Öncelik: Kullanıcının belirttiği tam isim
+			if anim.has_animation("Armature|walking_man|baselayer"):
+				target_anim = "Armature|walking_man|baselayer"
 			
+			# 2. Öncelik: Genel yürüyüş/koşma anahtar kelimeleri
 			if target_anim == "":
 				for anim_name in anim_list:
-					if anim_name.to_lower().contains("idle"):
+					var low_name = anim_name.to_lower()
+					if low_name.contains("walking") or low_name.contains("walk") or low_name.contains("run") or low_name.contains("yuru") or low_name.contains("move"):
 						target_anim = anim_name
 						break
 			
@@ -42,6 +46,7 @@ func _ready():
 				var animation = anim.get_animation(target_anim)
 				animation.loop_mode = Animation.LOOP_LINEAR
 				anim.play(target_anim)
+				anim.speed_scale = 1.0 
 		
 		var visual = get_parent().get_node_or_null("Visual")
 		if visual:
@@ -53,9 +58,10 @@ func _process(delta):
 	if proxy and get_parent() is Node2D:
 		var p = get_parent()
 		
-		# YANDAN GÖRÜNÜM (SIDE-VIEW) EŞLEMESİ:
-		# 2D Y aşağı artar, 3D Y yukarı artar. Bu yüzden -y yapıyoruz.
-		# vertical_offset 3D uzayda uygulanır.
+		# PERSPEKTİF (YANDAN) GÖRÜNÜM EŞLEMESİ:
+		# 2D X -> 3D X
+		# 2D Y -> 3D -Y (Yukarı/Aşağı görünümü için)
+		# vertical_offset -> 3D Y ekseninde ek ofset (Karakteri aşağı/yukarı kaydırır)
 		proxy.global_position = Vector3(p.global_position.x, -p.global_position.y + vertical_offset, 0)
 		
 		if is_flat:
@@ -63,13 +69,13 @@ func _process(delta):
 			current_rotation += auto_rotate_speed * delta
 			proxy.rotation.y = current_rotation
 		else:
-			# Rotasyon Yönetimi
+			# Rotasyon Yönetimi (Y ekseni etrafında dönme - Yaw)
 			if follow_2d_rotation:
 				proxy.rotation.y = -p.rotation + rotation_offset
 			else:
-				proxy.rotation.y = rotation_offset # Sabit açı (Player için)
+				proxy.rotation.y = rotation_offset
 			
-			# TILT ETKİSİ
+			# TILT ETKİSİ (Z ekseninde hafif yatma)
 			if tilt_amount != 0.0:
 				var target_tilt = 0.0
 				var input_x = Input.get_axis("move_left", "move_right")

@@ -172,6 +172,7 @@ texture = ExtResource("13_texture")
 script = ExtResource("2_script")
 
 [node name="HUD" parent="." unique_id=218797780 instance=ExtResource("3_scene")]
+layer = 10
 
 [node name="Instructions" type="Label" parent="HUD" unique_id=465913768]
 offset_left = 20.0
