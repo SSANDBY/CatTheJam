@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Authenticating...</title>
+</head>
+<body>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+        if (code) {
+            localStorage.setItem('oauth_code', code);
+            // Redirect back to the main game page
+            window.location.href = "index.html";
+        } else {
+            document.body.innerHTML = "<h1>Authentication failed: No code received.</h1>";
+        }
+    </script>
+</body>
+</html>
