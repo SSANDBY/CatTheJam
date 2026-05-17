@@ -94,17 +94,30 @@ func _on_token_response(result: int, code: int, _headers: Array,
 
 
 # ================================================================
-#  ADIM 2 — /v2/me
+#  ADIM 2 — /v2/me (Proxy via Supabase)
 # ================================================================
 
 func _get_me() -> void:
 	var http := HTTPRequest.new()
 	add_child(http)
 	http.request_completed.connect(_on_me_response.bind(http))
-	var headers := ["Authorization: Bearer %s" % _access_token]
-	var err := http.request(API_BASE + "/me", headers, HTTPClient.METHOD_GET)
+	
+	var url = SUPABASE_URL + "/functions/v1/" + EDGE_FN_NAME
+	var headers = [
+		"Content-Type: application/json",
+		"apikey: " + SUPABASE_KEY,
+		"Authorization: Bearer " + SUPABASE_KEY,
+	]
+	
+	# Action: "get_me" tells the edge function to proxy the request
+	var body = JSON.stringify({
+		"action": "get_me",
+		"access_token": _access_token
+	})
+	
+	var err := http.request(url, headers, HTTPClient.METHOD_POST, body)
 	if err != OK:
-		emit_signal("api_error", "/me isteği gönderilemedi: %d" % err)
+		emit_signal("api_error", "/me (proxy) isteği gönderilemedi: %d" % err)
 		http.queue_free()
 
 
@@ -115,10 +128,16 @@ func _on_me_response(result: int, code: int, _headers: Array,
 		emit_signal("api_error", "/me başarısız. HTTP %d" % code)
 		return
 	var json := JSON.new()
-	if json.parse(body.get_string_from_utf8()) != OK:
+	var body_str = body.get_string_from_utf8()
+	if json.parse(body_str) != OK:
 		emit_signal("api_error", "/me JSON parse hatası")
 		return
 	var data = json.get_data()
+	
+	# Some edge functions might wrap the response
+	if data.has("user"):
+		data = data["user"]
+		
 	_user_id = data.get("id", 0)
 	emit_signal("me_loaded", data)
 
