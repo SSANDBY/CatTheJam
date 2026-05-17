@@ -1,38 +1,39 @@
-extends CPUParticles2D
+extends Node2D
 
-@export var texture_atlas: Texture2D = preload("res://models/asteroid1.png")
-@export var h_frames: int = 7
-@export var v_frames: int = 7
+@export var meteor_scene: PackedScene = preload("res://scenes/Meteor.tscn")
+@export var spawn_interval: float = 0.5
 
-var particles_data = {}
+var timer = 0.0
 
 func _ready():
-	# Set texture immediately
-	texture = texture_atlas
+	# Initial burst so screen isn't empty at start
+	for i in range(20):
+		spawn_meteor(true)
+
+func _process(delta):
+	timer += delta
+	if timer >= spawn_interval:
+		timer = 0.0
+		spawn_meteor(false)
+
+func spawn_meteor(random_position_on_screen: bool):
+	if not meteor_scene: return
+	var m = meteor_scene.instantiate()
 	
-	# Create and configure material
-	var mat = CanvasItemMaterial.new()
-	mat.particles_animation = true
-	mat.particles_anim_h_frames = h_frames
-	mat.particles_anim_v_frames = v_frames
-	mat.particles_anim_loop = false
-	self.material = mat
+	# Skora göre alev olasılığı
+	var fire_prob = 0.05 # Başlangıçta sadece %5 ihtimalle alevli
+	var hud = get_parent().get_node_or_null("HUD")
+	if hud and "score" in hud:
+		# Skor arttıkça (örn. skor 100 olduğunda) olasılık %85'lere kadar çıkar
+		fire_prob = clamp(0.05 + (hud.score / 125.0), 0.0, 1.0)
 	
-	# Random frame selection
-	anim_offset_min = 0.0
-	anim_offset_max = 1.0
-	anim_speed_min = 0.0
-	anim_speed_max = 0.0
+	m.has_fire = randf() < fire_prob
 	
-	# Reset particles to apply new material/texture settings immediately
-	emitting = true
-	restart()
-	
-	# If they are still invisible, maybe they are too small? 
-	# Let's ensure scale is visible (though it's usually set in the inspector)
-	# scale_amount_min = 5.0
-	# scale_amount_max = 15.0
-	
-	# Ensure visibility - remove any dark modulation
-	modulate = Color(1, 1, 1, 1)
-	self_modulate = Color(1, 1, 1, 1)
+	if random_position_on_screen:
+		# Spawn anywhere within view
+		m.position = Vector2(randf_range(-500, 1500), randf_range(-500, 1200))
+	else:
+		# Spawn slightly outside the top/right mostly
+		m.position = Vector2(randf_range(500, 2000), randf_range(-800, -200))
+		
+	add_child(m)
