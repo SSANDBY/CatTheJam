@@ -84,6 +84,8 @@ func _physics_process(delta):
 	
 	if hud:
 		hud.update_energy(shield_energy, shield_max_energy)
+		if "update_mana" in hud:
+			hud.update_mana(mana, max_mana)
 		
 		# Update dynamic max_orbit_radius based on score
 		var main = get_parent()
@@ -294,4 +296,6 @@ func show_buff_text(text):
 	tween.tween_property(label, "position:y", label.position.y - 150, 2.5)
 	tween.parallel().tween_property(label, "modulate:a", 0.0, 2.5)
 	tween.tween_callback(canvas.queue_free)
+en_callback(canvas.queue_free)
+nvas.queue_free)
 en_callback(canvas.queue_free)
