@@ -13,9 +13,10 @@ func _process(delta):
 	# Smoothly follow player position
 	global_position = global_position.lerp(target.global_position, smooth_speed * delta)
 	
-	# Sync 3D Camera with 2D position (Side-View Mapping)
+	# Sync 3D Camera with 2D position (Angled X-Z Mapping)
 	if camera_3d:
 		camera_3d.global_position.x = global_position.x
-		camera_3d.global_position.y = -global_position.y
-		# camera_3d.global_position.z = 1000 # Fixed depth
+		# Karakteri merkezlemek için: Kamera Z'si = Karakter Y'si + Kamera Y yüksekliği (45 derece açı için)
+		camera_3d.global_position.z = global_position.y + 500
+		camera_3d.global_position.y = 500 # Yüksekliği sabit tutalım
 

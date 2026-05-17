@@ -30,15 +30,17 @@ func _ready():
 			var target_anim = ""
 			var anim_list = anim.get_animation_list()
 			
-			# 1. Öncelik: Kullanıcının belirttiği tam isim
-			if anim.has_animation("Armature|walking_man|baselayer"):
+			# 1. Öncelik: Kullanıcının belirttiği tam isimler
+			if anim.has_animation("Armature|Swim_Forward|baselayer"):
+				target_anim = "Armature|Swim_Forward|baselayer"
+			elif anim.has_animation("Armature|walking_man|baselayer"):
 				target_anim = "Armature|walking_man|baselayer"
 			
-			# 2. Öncelik: Genel yürüyüş/koşma anahtar kelimeleri
+			# 2. Öncelik: Genel yürüyüş/koşma/yüzme anahtar kelimeleri
 			if target_anim == "":
 				for anim_name in anim_list:
 					var low_name = anim_name.to_lower()
-					if low_name.contains("walking") or low_name.contains("walk") or low_name.contains("run") or low_name.contains("yuru") or low_name.contains("move"):
+					if low_name.contains("swim") or low_name.contains("walking") or low_name.contains("walk") or low_name.contains("run") or low_name.contains("yuru") or low_name.contains("move"):
 						target_anim = anim_name
 						break
 			
@@ -58,11 +60,11 @@ func _process(delta):
 	if proxy and get_parent() is Node2D:
 		var p = get_parent()
 		
-		# PERSPEKTİF (YANDAN) GÖRÜNÜM EŞLEMESİ:
+		# 2.5D X-Z DÜZLEMİ EŞLEMESİ (Yer düzlemi):
 		# 2D X -> 3D X
-		# 2D Y -> 3D -Y (Yukarı/Aşağı görünümü için)
-		# vertical_offset -> 3D Y ekseninde ek ofset (Karakteri aşağı/yukarı kaydırır)
-		proxy.global_position = Vector3(p.global_position.x, -p.global_position.y + vertical_offset, 0)
+		# 2D Y -> 3D Z (Derinlik)
+		# 3D Y -> vertical_offset (Sabit yükseklik - asla değişmez, itilmeyi önler)
+		proxy.global_position = Vector3(p.global_position.x, vertical_offset, p.global_position.y)
 		
 		if is_flat:
 			proxy.rotation.x = deg_to_rad(90)
@@ -75,7 +77,7 @@ func _process(delta):
 			else:
 				proxy.rotation.y = rotation_offset
 			
-			# TILT ETKİSİ (Z ekseninde hafif yatma)
+			# TILT ETKİSİ
 			if tilt_amount != 0.0:
 				var target_tilt = 0.0
 				var input_x = Input.get_axis("move_left", "move_right")
