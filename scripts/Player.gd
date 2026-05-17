@@ -28,12 +28,17 @@ var attack_cooldown_timer = 0.0
 var is_shielding = false
 var shield_energy = 100.0
 
+var projectile_count = 1
+var projectile_speed_mult = 1.0
+var projectile_cooldown_mult = 1.0
+
 @onready var sword_area = $SwordArea
 @onready var shield_visual = $ShieldVisual
 @onready var hud = get_parent().get_node_or_null("HUD")
 
 func _ready():
-	sword_area.monitoring = false
+	if sword_area:
+		sword_area.monitoring = false
 	shield_visual.visible = false
 	
 	var grad = Gradient.new()
@@ -68,9 +73,9 @@ func _physics_process(delta):
 		return
 
 	# Shield logic (Right Click or K)
-	if (Input.is_action_pressed("defend") or Input.is_key_pressed(KEY_K)) and shield_energy > 0:
+	if (Input.is_action_pressed("defend") or Input.is_key_pressed(KEY_K)): # Infinite for testing: and shield_energy > 0
 		is_shielding = true
-		shield_energy = max(0.0, shield_energy - 40.0 * delta)
+		# shield_energy -= 40.0 * delta # Disabled for infinite shield testing
 		shield_visual.visible = true
 	else:
 		is_shielding = false
@@ -83,8 +88,11 @@ func _physics_process(delta):
 		# Update dynamic max_orbit_radius based on score
 		var main = get_parent()
 		var is_phase_2 = "is_pedago_phase" in main and main.is_pedago_phase
+		var is_phase_3 = "is_phase_3" in main and main.is_phase_3
 		
-		if is_phase_2:
+		if is_phase_3:
+			max_orbit_radius = target_max_orbit_radius * 9.0
+		elif is_phase_2:
 			max_orbit_radius = target_max_orbit_radius * 3.0
 		else:
 			# Shrinks from 2000 to 220 between score 0 and 100
@@ -159,13 +167,18 @@ func _physics_process(delta):
 	# Scale gravity with score
 	var main = get_parent()
 	var is_phase_2 = "is_pedago_phase" in main and main.is_pedago_phase
+	var is_phase_3 = "is_phase_3" in main and main.is_phase_3
 	
 	var score_factor = 1.0 + (hud.score * 0.02) if hud else 1.0
-	if is_phase_2:
+	if is_phase_2 or is_phase_3:
 		score_factor = 1.0
 
 	var gravity_force = (to_center.normalized() * gravity_constant * score_factor) / max(distance_sq, 1000.0)
 	var total_pull = gravity_force + (to_center.normalized() * ambient_pull * score_factor)
+	
+	if is_phase_3:
+		total_pull *= 0.1
+		
 	velocity += total_pull * delta
 	
 	move_and_slide()
@@ -193,17 +206,88 @@ func start_dash(direction):
 	velocity = direction * dash_speed
 
 func start_attack():
+	var main = get_parent()
+	var is_phase_3 = "is_phase_3" in main and main.is_phase_3
+	
 	is_attacking = true
 	attack_timer = sword_duration
-	sword_area.monitoring = true
-	sword_area.visible = true
+	
+	if is_phase_3:
+		var mouse_pos = get_global_mouse_position()
+		var base_direction = (mouse_pos - global_position).normalized()
+		var spread_angle = deg_to_rad(15.0)
+		
+		for i in range(projectile_count):
+			var sword_proj = preload("res://scenes/SwordProjectile.tscn").instantiate()
+			sword_proj.global_position = global_position
+			
+			var angle_offset = (i - (projectile_count - 1) / 2.0) * spread_angle
+			var final_dir = base_direction.rotated(angle_offset)
+			
+			sword_proj.direction = final_dir
+			sword_proj.rotation = final_dir.angle()
+			if "speed" in sword_proj:
+				sword_proj.speed *= projectile_speed_mult
+				
+			get_parent().add_child(sword_proj)
+	else:
+		if sword_area:
+			sword_area.monitoring = true
+			sword_area.visible = true
 
 func stop_attack():
+	var main = get_parent()
+	var is_phase_3 = "is_phase_3" in main and main.is_phase_3
+	
 	is_attacking = false
-	attack_cooldown_timer = sword_cooldown
-	sword_area.monitoring = false
-	sword_area.visible = false
+	if is_phase_3:
+		attack_cooldown_timer = 0.5 * projectile_cooldown_mult
+	else:
+		attack_cooldown_timer = sword_cooldown
+		if sword_area:
+			sword_area.monitoring = false
+			sword_area.visible = false
 
 func _on_sword_area_area_entered(area):
 	if area.is_in_group("norminettes"):
 		area.queue_free()
+
+func apply_random_buff():
+	var buff_types = ["multi", "speed", "firerate", "shield"]
+	var chosen = buff_types[randi() % buff_types.size()]
+	var text = ""
+	
+	if chosen == "multi":
+		projectile_count += 1
+		text = "+1 Projectile!"
+	elif chosen == "speed":
+		projectile_speed_mult += 0.3
+		text = "Faster Projectiles!"
+	elif chosen == "firerate":
+		projectile_cooldown_mult *= 0.8
+		text = "Increased Fire Rate!"
+	elif chosen == "shield":
+		shield_max_energy += 50.0
+		shield_energy = shield_max_energy
+		text = "Shield Upgraded!"
+		
+	show_buff_text(text)
+
+func show_buff_text(text):
+	var label = Label.new()
+	label.text = text
+	label.add_theme_font_size_override("font_size", 48)
+	label.add_theme_color_override("font_color", Color(0.2, 1.0, 0.2))
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.size = Vector2(1280, 100)
+	label.position = Vector2(0, 200)
+	
+	var canvas = CanvasLayer.new()
+	canvas.layer = 110
+	canvas.add_child(label)
+	get_tree().root.add_child(canvas)
+	
+	var tween = create_tween()
+	tween.tween_property(label, "position:y", label.position.y - 150, 2.5)
+	tween.parallel().tween_property(label, "modulate:a", 0.0, 2.5)
+	tween.tween_callback(canvas.queue_free)

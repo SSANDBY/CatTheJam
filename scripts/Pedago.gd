@@ -25,7 +25,7 @@ func _physics_process(delta):
 		global_position += velocity * delta
 		rotation = velocity.angle()
 		
-		var base_scale = clamp(distance / 500.0, 0.4, 1.0)
+		var base_scale = clamp(distance / 500.0, 1.5, 4.0)
 		scale = Vector2(base_scale, base_scale)
 		
 		if distance < 15.0:
@@ -36,7 +36,11 @@ func _physics_process(delta):
 				main.start_phase_2()
 	else:
 		# Reached center, now chase player!
-		scale = Vector2(2.0, 2.0)
+		scale = Vector2(8.0, 8.0)
+		# Counter-scale the collision shape so the hitbox stays small
+		var col = get_node_or_null("CollisionShape2D")
+		if col:
+			col.scale = Vector2(0.1, 0.1)
 		var player = get_tree().root.find_child("Player", true, false)
 		if player:
 			var direction = (player.global_position - global_position).normalized()

@@ -16,6 +16,20 @@ func _ready():
 	velocity = (black_hole_pos - global_position).normalized() * speed
 
 func _physics_process(delta):
+	var main = get_tree().root.get_node_or_null("Main")
+	var is_phase_3 = main and "is_phase_3" in main and main.is_phase_3
+	
+	if is_phase_3:
+		var player = get_tree().root.find_child("Player", true, false)
+		if player:
+			var direction = (player.global_position - global_position).normalized()
+			velocity = direction * speed
+			
+		global_position += velocity * delta
+		rotation = velocity.angle()
+		scale = Vector2(0.5, 0.5)
+		return
+
 	var to_center = black_hole_pos - global_position
 	var distance_sq = to_center.length_squared()
 	
@@ -30,7 +44,7 @@ func _physics_process(delta):
 	
 	# DISTANCE SCALING (Shrink as it gets closer to the black hole)
 	var distance = to_center.length()
-	var base_scale = clamp(distance / 500.0, 0.2, 1.0)
+	var base_scale = clamp(distance / 500.0, 0.15, 0.7)
 	scale = Vector2(base_scale, base_scale)
 
 func _on_body_entered(body):

@@ -5,6 +5,9 @@ var alarm_label = null
 var alarm_timer = 0.0
 var phase_2_end_score = 0.0
 var matrix_layer_instance = null
+var is_phase_3 = false
+var loop_level = 0
+var normal_phase_end_score = 0.0
 
 func _ready():
 	# Set fullscreen on startup
@@ -30,8 +33,14 @@ func _process(delta):
 		var hud = get_node_or_null("HUD")
 		if hud and hud.score >= phase_2_end_score:
 			end_phase_2()
+			
+	if not is_pedago_phase and loop_level > 0:
+		var hud = get_node_or_null("HUD")
+		if hud and hud.score >= normal_phase_end_score:
+			start_phase_2()
 
 var matrix_rain_script = preload("res://scripts/MatrixRain.gd")
+var pedago_scene = preload("res://scenes/Pedago.tscn")
 
 func start_phase_2():
 	if is_pedago_phase: return
@@ -39,7 +48,10 @@ func start_phase_2():
 	
 	var hud = get_node_or_null("HUD")
 	if hud:
-		phase_2_end_score = hud.score + 250.0
+		if loop_level == 0:
+			phase_2_end_score = hud.score + 100.0
+		else:
+			phase_2_end_score = hud.score + 50.0
 	else:
 		phase_2_end_score = 999999.0
 	
@@ -79,6 +91,13 @@ func start_phase_2():
 	add_child(alarm_canvas)
 	
 	alarm_timer = 3.0
+	
+	var existing_pedagos = get_tree().get_nodes_in_group("pedagos")
+	if existing_pedagos.size() == 0:
+		var p = pedago_scene.instantiate()
+		p.global_position = Vector2(640, 360)
+		p.reached_center = true
+		add_child(p)
 
 func end_phase_2():
 	if not is_pedago_phase: return
@@ -97,3 +116,18 @@ func end_phase_2():
 	var pedagos = get_tree().get_nodes_in_group("pedagos")
 	for p in pedagos:
 		p.queue_free()
+		
+	loop_level += 1
+	var player = get_tree().root.find_child("Player", true, false)
+	if player and player.has_method("apply_random_buff"):
+		player.apply_random_buff()
+		
+	start_phase_3()
+
+func start_phase_3():
+	is_phase_3 = true
+	var hud = get_node_or_null("HUD")
+	if hud:
+		normal_phase_end_score = hud.score + 100.0
+	else:
+		normal_phase_end_score = 999999.0
