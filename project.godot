@@ -22,6 +22,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 PoolManager="*res://scripts/PoolManager.gd"
+Api42="*res://scripts/Api42.gd"
 
 [display]
 
