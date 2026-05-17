@@ -139,6 +139,7 @@ func _on_me_response(result: int, code: int, _headers: Array,
 		data = data["user"]
 		
 	_user_id = data.get("id", 0)
+	current_login = data.get("login", "Guest")
 	emit_signal("me_loaded", data)
 
 

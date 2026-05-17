@@ -160,6 +160,9 @@ func _physics_process(delta):
 			jetpack_left.emitting = false
 			jetpack_right.emitting = false
 	
+	# Mana regeneration
+	mana = move_toward(mana, max_mana, mana_regen * delta)
+	
 	# Gravity Logic
 	var to_center = black_hole_pos - global_position
 	var distance_sq = to_center.length_squared()
@@ -291,3 +294,4 @@ func show_buff_text(text):
 	tween.tween_property(label, "position:y", label.position.y - 150, 2.5)
 	tween.parallel().tween_property(label, "modulate:a", 0.0, 2.5)
 	tween.tween_callback(canvas.queue_free)
+en_callback(canvas.queue_free)
