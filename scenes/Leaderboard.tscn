@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://cleaderboard123"]
+[gd_scene format=3 uid="uid://fn60wxomvnu"]
 
 [ext_resource type="Script" path="res://scripts/Leaderboard.gd" id="1_script"]
 

@@ -127,6 +127,14 @@ func end_phase_2():
 		
 	start_phase_3()
 
+func start_phase_3():
+	is_phase_3 = true
+	var hud = get_tree().root.find_child("HUD", true, false)
+	if hud:
+		normal_phase_end_score = hud.score + 100.0
+	else:
+		normal_phase_end_score = 999999.0
+
 func game_over():
 	var hud = get_tree().root.find_child("HUD", true, false)
 	if hud:
