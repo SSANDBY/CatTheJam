@@ -124,11 +124,11 @@ func _get_me() -> void:
 func _on_me_response(result: int, code: int, _headers: Array,
 					 body: PackedByteArray, http: HTTPRequest) -> void:
 	http.queue_free()
+	var body_str = body.get_string_from_utf8()
 	if result != HTTPRequest.RESULT_SUCCESS or code != 200:
-		emit_signal("api_error", "/me başarısız. HTTP %d" % code)
+		emit_signal("api_error", "/me başarısız. HTTP %d: %s" % [code, body_str.left(200)])
 		return
 	var json := JSON.new()
-	var body_str = body.get_string_from_utf8()
 	if json.parse(body_str) != OK:
 		emit_signal("api_error", "/me JSON parse hatası")
 		return

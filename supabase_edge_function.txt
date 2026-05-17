@@ -1,0 +1,54 @@
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
+
+const CLIENT_ID     = "u-s4t2ud-0bde3500dcb197e05057409b4ad521d46c70e3ae1a02fb346a3793448e859f84"
+const CLIENT_SECRET = Deno.env.get("FT_CLIENT_SECRET")!
+const REDIRECT_URI  = "https://hudayiarici.github.io/CatTheJam/callback.html"
+
+serve(async (req) => {
+  const headers = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+    "Content-Type": "application/json",
+  }
+
+  if (req.method === "OPTIONS") return new Response("ok", { headers })
+
+  try {
+    const body = await req.json()
+
+    // EĞER AKSİYON "get_me" İSE (Proxy Modu)
+    if (body.action === "get_me") {
+      const res = await fetch("https://api.intra.42.fr/v2/me", {
+        headers: { "Authorization": `Bearer ${body.access_token}` }
+      })
+      const userData = await res.json()
+      return new Response(JSON.stringify(userData), { headers })
+    }
+
+    // NORMAL TOKEN DEĞİŞİMİ
+    const { code } = body
+    if (!code) return new Response(JSON.stringify({ error: "code missing" }), { status: 400, headers })
+
+    const tokenRes = await fetch("https://api.intra.42.fr/oauth/token", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        grant_type:    "authorization_code",
+        client_id:     CLIENT_ID,
+        client_secret: CLIENT_SECRET,
+        code:          code,
+        redirect_uri:  REDIRECT_URI,
+      }),
+    })
+
+    const tokenData = await tokenRes.json()
+    if (!tokenData.access_token) {
+      return new Response(JSON.stringify({ error: "token exchange failed", detail: tokenData }), { status: 400, headers })
+    }
+
+    return new Response(JSON.stringify({ access_token: tokenData.access_token }), { headers })
+
+  } catch (e) {
+    return new Response(JSON.stringify({ error: String(e) }), { status: 500, headers })
+  }
+})
