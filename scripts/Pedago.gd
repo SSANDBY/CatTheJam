@@ -71,8 +71,17 @@ func _physics_process(delta):
 
 func _on_body_entered(body):
 	if body.name == "Player":
-		if body.is_shielding:
+		if body.has_method("is_shielding") and body.is_shielding:
+			# Player is shielding, Berkay dies instead
+			print("Berkay defeated by shield!")
 			PoolManager.return_instance(self)
 			return
+		
+		# Double check if player is shielding (just in case variable name differs)
+		if "is_shielding" in body and body.is_shielding:
+			print("Berkay defeated by shield (fallback)!")
+			PoolManager.return_instance(self)
+			return
+
 		print("Player hit by Pedago!")
 		GameManager.game_over()

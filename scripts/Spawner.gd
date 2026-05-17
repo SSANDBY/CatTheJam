@@ -63,7 +63,8 @@ func spawn_norminette(time_factor):
 	var player = get_tree().root.find_child("Player", true, false)
 	var spawn_radius = 2000.0 # Fallback default
 	if player and "max_orbit_radius" in player:
-		spawn_radius = player.max_orbit_radius + 150.0
+		# Increase radius to ensure it's outside the circle
+		spawn_radius = max(player.max_orbit_radius + 400.0, 800.0)
 		
 	var angle = randf() * TAU
 	var spawn_pos = Vector2(640, 360) + Vector2.RIGHT.rotated(angle) * spawn_radius
@@ -74,9 +75,9 @@ func spawn_norminette(time_factor):
 func spawn_moulinette():
 	if not moulinette_scene: return
 	var moulinette = PoolManager.get_instance(moulinette_scene)
-	# Spawn Moulinette at a random point on a circle within view
+	# Spawn Moulinette further out
 	var angle = randf() * TAU
-	var spawn_dist = 320.0
+	var spawn_dist = randf_range(600.0, 900.0) 
 	moulinette.global_position = Vector2(640, 360) + Vector2.RIGHT.rotated(angle) * spawn_dist
 	get_parent().add_child(moulinette)
 
@@ -97,7 +98,7 @@ func spawn_pedago(time_factor):
 	var player = get_tree().root.find_child("Player", true, false)
 	var spawn_radius = 2000.0 # Fallback default
 	if player and "max_orbit_radius" in player:
-		spawn_radius = player.max_orbit_radius + 150.0
+		spawn_radius = player.max_orbit_radius + 500.0
 		
 	var angle = randf() * TAU
 	var spawn_pos = Vector2(640, 360) + Vector2.RIGHT.rotated(angle) * spawn_radius
