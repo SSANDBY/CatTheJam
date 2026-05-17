@@ -7,6 +7,11 @@ func _ready():
 	Api42.leaderboard_loaded.connect(_on_leaderboard_loaded)
 	status_label.text = "Loading leaderboard..."
 	Api42.fetch_leaderboard()
+	
+	# Fail-safe timeout
+	await get_tree().create_timer(5.0).timeout
+	if status_label.visible:
+		status_label.text = "Failed to load leaderboard. Please try again."
 
 func _on_leaderboard_loaded(data: Array):
 	status_label.visible = false

@@ -200,6 +200,7 @@ func _on_score_submitted(result, code, _headers, body, http):
 # ================================================================
 
 func fetch_leaderboard() -> void:
+	print("Fetching leaderboard from Supabase...")
 	var http := HTTPRequest.new()
 	add_child(http)
 	http.request_completed.connect(_on_leaderboard.bind(http))
@@ -208,11 +209,25 @@ func fetch_leaderboard() -> void:
 		"apikey: " + SUPABASE_KEY,
 		"Authorization: Bearer " + SUPABASE_KEY,
 	]
-	http.request(url, headers, HTTPClient.METHOD_GET)
+	var err = http.request(url, headers, HTTPClient.METHOD_GET)
+	if err != OK:
+		print("Leaderboard request failed to start: ", err)
+		http.queue_free()
 
-func _on_leaderboard(_result, code, _headers, body, http):
+func _on_leaderboard(result, code, _headers, body, http):
 	http.queue_free()
+	print("Leaderboard response received. Code: ", code)
+	if result != HTTPRequest.RESULT_SUCCESS:
+		print("Leaderboard HTTP error result: ", result)
+		return
+		
 	if code == 200:
 		var json := JSON.new()
-		if json.parse(body.get_string_from_utf8()) == OK:
+		var body_str = body.get_string_from_utf8()
+		print("Leaderboard data: ", body_str)
+		if json.parse(body_str) == OK:
 			emit_signal("leaderboard_loaded", json.get_data())
+		else:
+			print("Leaderboard JSON parse error")
+	else:
+		print("Leaderboard error response: ", body.get_string_from_utf8())
