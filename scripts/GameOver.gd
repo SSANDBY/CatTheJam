@@ -19,10 +19,13 @@ func _ready():
 	)
 
 func _on_score_submitted():
-	status_label.text = "Score saved online! 🌐"
+	status_label.text = "Score saved online!"
 
 func _on_restart_button_pressed():
 	get_tree().change_scene_to_file("res://scenes/Main.tscn")
 
 func _on_menu_button_pressed():
 	get_tree().change_scene_to_file("res://scenes/MainMenu.tscn")
+
+func _on_leaderboard_button_pressed():
+	get_tree().change_scene_to_file("res://scenes/Leaderboard.tscn")

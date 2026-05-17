@@ -62,5 +62,12 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "MAIN MENU"
 
+[node name="LeaderboardButton" type="Button" parent="CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(300, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "LEADERBOARD"
+
 [connection signal="pressed" from="CenterContainer/VBoxContainer/RestartButton" to="." method="_on_restart_button_pressed"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/MenuButton" to="." method="_on_menu_button_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/LeaderboardButton" to="." method="_on_leaderboard_button_pressed"]
