@@ -152,7 +152,6 @@ func _on_me_response(result: int, code: int, _headers: Array, body: PackedByteAr
 # ================================================================
 #  ADIM 3 — Submit Score
 # ================================================================
-
 func submit_score(login: String, display_name: String, avatar_url: String, score: int) -> void:
 	var http := HTTPRequest.new()
 	add_child(http)
@@ -162,6 +161,7 @@ func submit_score(login: String, display_name: String, avatar_url: String, score
 		"Content-Type: application/json",
 		"apikey: " + SUPABASE_KEY,
 		"Authorization: Bearer " + SUPABASE_KEY,
+		"Prefer: return=minimal" # Kayıt sonrası veri dönmesine gerek yok
 	]
 	var body = JSON.stringify({
 		"login":        login,
@@ -169,12 +169,20 @@ func submit_score(login: String, display_name: String, avatar_url: String, score
 		"avatar_url":   avatar_url,
 		"score":        score,
 	})
-	http.request(url, headers, HTTPClient.METHOD_POST, body)
+	var err := http.request(url, headers, HTTPClient.METHOD_POST, body)
+	if err != OK:
+		print("Score request error: ", err)
+		http.queue_free()
 
-func _on_score_submitted(_result, code, _headers, _body, http):
+func _on_score_submitted(result, code, _headers, body, http):
 	http.queue_free()
-	if code == 201 or code == 200 or code == 204:
+	if result == HTTPRequest.RESULT_SUCCESS and (code == 201 or code == 200 or code == 204):
+		print("Score saved to Supabase successfully!")
 		emit_signal("score_submitted")
+	else:
+		var error_msg = body.get_string_from_utf8()
+		print("Score submission failed. Code: ", code, " Body: ", error_msg)
+		emit_signal("api_error", "Skor kaydedilemedi: HTTP " + str(code))
 
 # ================================================================
 #  ADIM 4 — Leaderboard

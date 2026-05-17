@@ -16,13 +16,33 @@ serve(async (req) => {
   try {
     const body = await req.json()
 
-    // EĞER AKSİYON "get_me" İSE (Proxy Modu)
+    // AKSİYON: get_me
     if (body.action === "get_me") {
       const res = await fetch("https://api.intra.42.fr/v2/me", {
         headers: { "Authorization": `Bearer ${body.access_token}` }
       })
       const userData = await res.json()
       return new Response(JSON.stringify(userData), { headers })
+    }
+
+    // AKSİYON: get_logtime (O günkü toplam login süresini hesaplar)
+    if (body.action === "get_logtime") {
+      const today = new Date().toISOString().split('T')[0];
+      const url = `https://api.intra.42.fr/v2/users/${body.user_id}/locations?range[begin_at]=${today}T00:00:00.000Z,${today}T23:59:59.999Z`;
+      
+      const res = await fetch(url, {
+        headers: { "Authorization": `Bearer ${body.access_token}` }
+      })
+      const locations = await res.json()
+      
+      let totalMinutes = 0;
+      locations.forEach((loc: any) => {
+        const start = new Date(loc.begin_at);
+        const end = loc.end_at ? new Date(loc.end_at) : new Date(); // Hala login ise şu anı al
+        totalMinutes += (end.getTime() - start.getTime()) / (1000 * 60);
+      });
+      
+      return new Response(JSON.stringify({ hours: totalMinutes / 60 }), { headers })
     }
 
     // NORMAL TOKEN DEĞİŞİMİ
