@@ -53,6 +53,16 @@ theme_override_font_sizes/font_size = 20
 text = "PLAYER: GUEST"
 horizontal_alignment = 2
 
+[node name="LogtimeLabel" type="Label" parent="."]
+offset_left = 960.0
+offset_top = 645.0
+offset_right = 1260.0
+offset_bottom = 670.0
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+theme_override_font_sizes/font_size = 14
+text = "LOGGED IN: 0.00h"
+horizontal_alignment = 2
+
 [node name="PotionLabel" type="Label" parent="."]
 offset_left = 20.0
 offset_top = 550.0

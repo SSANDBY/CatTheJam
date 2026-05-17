@@ -58,6 +58,7 @@ func _on_logtime_response(result: int, code: int, _headers: Array,
 		var json := JSON.new()
 		if json.parse(body.get_string_from_utf8()) == OK:
 			var hours = json.get_data().get("hours", 0.0)
+			current_logtime = hours
 			potions = int(hours)
 			if OS.has_feature("editor"):
 				potions = 5 # Editor'de test için 5 pot verelim
@@ -177,8 +178,10 @@ func _on_me_response(result: int, code: int, _headers: Array,
 
 # ================================================================
 #  ADIM 3 — Skoru Supabase'e kaydet
-# ================================================================
-
+signal api_error(message: String)
+signal leaderboard_loaded(data: Array)
+signal score_submitted()
+...
 func submit_score(login: String, display_name: String, avatar_url: String, score: int) -> void:
 	var http := HTTPRequest.new()
 	add_child(http)
@@ -190,6 +193,7 @@ func submit_score(login: String, display_name: String, avatar_url: String, score
 		"Authorization: Bearer " + SUPABASE_KEY,
 		"Prefer: resolution=merge-duplicates",
 	]
+	# Handle both cases: update if exists (UPSERT)
 	var body = JSON.stringify({
 		"login":        login,
 		"display_name": display_name,
@@ -200,8 +204,12 @@ func submit_score(login: String, display_name: String, avatar_url: String, score
 	if err != OK:
 		http.queue_free()
 
-func _on_score_submitted(_result, _code, _headers, _body, http):
+func _on_score_submitted(_result, code, _headers, _body, http):
 	http.queue_free()
+	if code == 201 or code == 200 or code == 204:
+		emit_signal("score_submitted")
+	else:
+		print("Score submission failed with code: ", code)
 
 
 # ================================================================
@@ -226,3 +234,4 @@ func _on_leaderboard(_result, code, _headers, body, http):
 	var json := JSON.new()
 	if json.parse(body.get_string_from_utf8()) == OK:
 		emit_signal("leaderboard_loaded", json.get_data())
+ata())

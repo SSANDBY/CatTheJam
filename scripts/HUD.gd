@@ -4,6 +4,7 @@ extends CanvasLayer
 @onready var energy_bar = $EnergyBar
 @onready var mana_bar = $ManaBar
 @onready var nickname_label = $NicknameLabel
+@onready var logtime_label = get_node_or_null("LogtimeLabel")
 @onready var potion_label = get_node_or_null("PotionLabel")
 
 var score = 0.0
@@ -11,6 +12,8 @@ var score = 0.0
 func _ready():
 	if nickname_label:
 		nickname_label.text = "PLAYER: " + Api42.current_login.to_upper()
+	if logtime_label:
+		logtime_label.text = "LOGGED IN TODAY: %.2fh" % Api42.current_logtime
 	update_potions(Api42.potions)
 
 func _process(delta):
