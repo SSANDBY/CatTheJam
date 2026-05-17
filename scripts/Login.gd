@@ -35,8 +35,3 @@ func _on_error(message: String):
 	status_label.text = "Error: " + message
 	login_button.disabled = false
 	login_button.text = "Try Again"
-
-func _on_error(message: String):
-	status_label.text = "Error: " + message
-	login_button.disabled = false
-	login_button.text = "Try Again"
