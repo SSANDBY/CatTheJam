@@ -178,10 +178,8 @@ func _on_me_response(result: int, code: int, _headers: Array,
 
 # ================================================================
 #  ADIM 3 — Skoru Supabase'e kaydet
-signal api_error(message: String)
-signal leaderboard_loaded(data: Array)
-signal score_submitted()
-...
+# ================================================================
+
 func submit_score(login: String, display_name: String, avatar_url: String, score: int) -> void:
 	var http := HTTPRequest.new()
 	add_child(http)
