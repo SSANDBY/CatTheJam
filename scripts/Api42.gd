@@ -38,8 +38,19 @@ func login() -> void:
 	var url := "%s?client_id=%s&redirect_uri=%s&response_type=code&scope=public" \
 			   % [AUTH_URL, CLIENT_ID, REDIRECT_URI.uri_encode()]
 	if OS.get_name() == "Web":
-		JavaScriptBridge.eval("localStorage.setItem('waiting_oauth', '1')")
-		JavaScriptBridge.eval("window.location.href = '%s'" % url)
+		JavaScriptBridge.eval("""
+			var width = 600, height = 800;
+			var left = (window.innerWidth / 2) - (width / 2);
+			var top = (window.innerHeight / 2) - (height / 2);
+			window.open('%s', '42 Login', 'width='+width+',height='+height+',top='+top+',left='+left);
+			
+			// Listen for message from popup
+			window.addEventListener('message', function(event) {
+				if (event.data.type === 'oauth_complete') {
+					localStorage.setItem('oauth_code', event.data.code);
+				}
+			}, { once: true });
+		""" % url)
 	else:
 		OS.shell_open(url)
 	emit_signal("login_started")

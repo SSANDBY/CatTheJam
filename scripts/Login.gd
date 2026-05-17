@@ -28,8 +28,14 @@ func _input(event):
 
 func _on_login_button_pressed():
 	login_button.disabled = true
-	status_label.text = "Redirecting to 42 Intra..."
+	status_label.text = "Login window opened..."
 	Api42.login()
+	
+	# Start polling for code (for Popup mode)
+	var timer = get_tree().create_timer(1.0)
+	while login_button.disabled:
+		Api42.check_oauth_return()
+		await get_tree().create_timer(0.5).timeout
 
 func _on_token_ready(_token: String):
 	status_label.text = "Authenticating..."

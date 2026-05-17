@@ -10,10 +10,17 @@
         const code = urlParams.get('code');
         if (code) {
             localStorage.setItem('oauth_code', code);
-            // Redirect back to the main game page
-            window.location.href = "index.html";
+            // Notify the parent window if it exists (Popup mode)
+            if (window.opener) {
+                window.opener.postMessage({ type: 'oauth_complete', code: code }, window.location.origin);
+                window.close();
+            } else {
+                // Fallback for redirect mode
+                window.location.replace("index.html");
+            }
         } else {
             document.body.innerHTML = "<h1>Authentication failed: No code received.</h1>";
+            setTimeout(() => window.close(), 3000);
         }
     </script>
 </body>
