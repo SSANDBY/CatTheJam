@@ -1,0 +1,67 @@
+[gd_scene load_steps=3 format=3 uid="uid://test42scene"]
+
+[ext_resource type="Script" path="res://scripts/ApiTest.gd" id="1_script"]
+[ext_resource type="Script" path="res://scripts/Api42.gd" id="2_api"]
+
+[node name="ApiTest" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.051, 0.051, 0.059, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Card" type="PanelContainer" parent="CenterContainer"]
+custom_minimum_size = Vector2(480, 320)
+
+[node name="VBox" type="VBoxContainer" parent="CenterContainer/Card"]
+layout_mode = 2
+alignment = 1
+
+[node name="EmojiLabel" type="Label" parent="CenterContainer/Card/VBox"]
+layout_mode = 2
+text = "🐱"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TitleLabel" type="Label" parent="CenterContainer/Card/VBox"]
+layout_mode = 2
+text = "42 API Test"
+horizontal_alignment = 1
+
+[node name="Spacer1" type="Control" parent="CenterContainer/Card/VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 16)
+
+[node name="StatusLabel" type="Label" parent="CenterContainer/Card/VBox"]
+layout_mode = 2
+text = "42 hesabınla giriş yapmak için butona tıkla."
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Spacer2" type="Control" parent="CenterContainer/Card/VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 24)
+
+[node name="LoginButton" type="Button" parent="CenterContainer/Card/VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(200, 48)
+text = "  42 ile Giriş Yap"
