@@ -33,7 +33,8 @@ var shield_energy = 100.0
 @onready var hud = get_parent().get_node_or_null("HUD")
 
 func _ready():
-	sword_area.monitoring = false
+	if sword_area:
+		sword_area.monitoring = false
 	shield_visual.visible = false
 	
 	var grad = Gradient.new()
@@ -83,8 +84,11 @@ func _physics_process(delta):
 		# Update dynamic max_orbit_radius based on score
 		var main = get_parent()
 		var is_phase_2 = "is_pedago_phase" in main and main.is_pedago_phase
+		var is_phase_3 = "is_phase_3" in main and main.is_phase_3
 		
-		if is_phase_2:
+		if is_phase_3:
+			max_orbit_radius = target_max_orbit_radius * 9.0
+		elif is_phase_2:
 			max_orbit_radius = target_max_orbit_radius * 3.0
 		else:
 			# Shrinks from 2000 to 220 between score 0 and 100
@@ -159,13 +163,18 @@ func _physics_process(delta):
 	# Scale gravity with score
 	var main = get_parent()
 	var is_phase_2 = "is_pedago_phase" in main and main.is_pedago_phase
+	var is_phase_3 = "is_phase_3" in main and main.is_phase_3
 	
 	var score_factor = 1.0 + (hud.score * 0.02) if hud else 1.0
-	if is_phase_2:
+	if is_phase_2 or is_phase_3:
 		score_factor = 1.0
 
 	var gravity_force = (to_center.normalized() * gravity_constant * score_factor) / max(distance_sq, 1000.0)
 	var total_pull = gravity_force + (to_center.normalized() * ambient_pull * score_factor)
+	
+	if is_phase_3:
+		total_pull *= 0.1
+		
 	velocity += total_pull * delta
 	
 	move_and_slide()
@@ -193,16 +202,37 @@ func start_dash(direction):
 	velocity = direction * dash_speed
 
 func start_attack():
+	var main = get_parent()
+	var is_phase_3 = "is_phase_3" in main and main.is_phase_3
+	
 	is_attacking = true
 	attack_timer = sword_duration
-	sword_area.monitoring = true
-	sword_area.visible = true
+	
+	if is_phase_3:
+		var sword_proj = preload("res://scenes/SwordProjectile.tscn").instantiate()
+		sword_proj.global_position = global_position
+		var mouse_pos = get_global_mouse_position()
+		var direction = (mouse_pos - global_position).normalized()
+		sword_proj.direction = direction
+		sword_proj.rotation = direction.angle()
+		get_parent().add_child(sword_proj)
+	else:
+		if sword_area:
+			sword_area.monitoring = true
+			sword_area.visible = true
 
 func stop_attack():
+	var main = get_parent()
+	var is_phase_3 = "is_phase_3" in main and main.is_phase_3
+	
 	is_attacking = false
-	attack_cooldown_timer = sword_cooldown
-	sword_area.monitoring = false
-	sword_area.visible = false
+	if is_phase_3:
+		attack_cooldown_timer = 0.5
+	else:
+		attack_cooldown_timer = sword_cooldown
+		if sword_area:
+			sword_area.monitoring = false
+			sword_area.visible = false
 
 func _on_sword_area_area_entered(area):
 	if area.is_in_group("norminettes"):

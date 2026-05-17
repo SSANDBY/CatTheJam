@@ -5,6 +5,7 @@ var alarm_label = null
 var alarm_timer = 0.0
 var phase_2_end_score = 0.0
 var matrix_layer_instance = null
+var is_phase_3 = false
 
 func _ready():
 	# Set fullscreen on startup
@@ -26,7 +27,7 @@ func _process(delta):
 				alarm_label.get_parent().queue_free()
 			alarm_label = null
 			
-	if is_pedago_phase:
+	if is_pedago_phase and not is_phase_3:
 		var hud = get_node_or_null("HUD")
 		if hud and hud.score >= phase_2_end_score:
 			end_phase_2()
@@ -39,7 +40,7 @@ func start_phase_2():
 	
 	var hud = get_node_or_null("HUD")
 	if hud:
-		phase_2_end_score = hud.score + 250.0
+		phase_2_end_score = hud.score + 100.0
 	else:
 		phase_2_end_score = 999999.0
 	
@@ -97,3 +98,8 @@ func end_phase_2():
 	var pedagos = get_tree().get_nodes_in_group("pedagos")
 	for p in pedagos:
 		p.queue_free()
+		
+	start_phase_3()
+
+func start_phase_3():
+	is_phase_3 = true
