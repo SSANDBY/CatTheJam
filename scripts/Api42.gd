@@ -25,6 +25,7 @@ signal leaderboard_loaded(data: Array)
 
 var _access_token : String = ""
 var _user_id      : int    = 0
+var current_login : String = "Guest"
 
 
 # ================================================================
