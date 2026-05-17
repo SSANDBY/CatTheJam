@@ -81,9 +81,15 @@ func _physics_process(delta):
 		hud.update_energy(shield_energy, shield_max_energy)
 		
 		# Update dynamic max_orbit_radius based on score
-		# Shrinks from 2000 to 220 between score 0 and 100
-		var score_progress = clamp(hud.score / 100.0, 0.0, 1.0)
-		max_orbit_radius = lerp(2000.0, target_max_orbit_radius, score_progress)
+		var main = get_parent()
+		var is_phase_2 = "is_pedago_phase" in main and main.is_pedago_phase
+		
+		if is_phase_2:
+			max_orbit_radius = target_max_orbit_radius * 3.0
+		else:
+			# Shrinks from 2000 to 220 between score 0 and 100
+			var score_progress = clamp(hud.score / 100.0, 0.0, 1.0)
+			max_orbit_radius = lerp(2000.0, target_max_orbit_radius, score_progress)
 		
 		# Update CenterCircle visual
 		var center_circle = get_parent().get_node_or_null("CenterCircle")
@@ -151,7 +157,13 @@ func _physics_process(delta):
 	var distance_sq = to_center.length_squared()
 	
 	# Scale gravity with score
+	var main = get_parent()
+	var is_phase_2 = "is_pedago_phase" in main and main.is_pedago_phase
+	
 	var score_factor = 1.0 + (hud.score * 0.02) if hud else 1.0
+	if is_phase_2:
+		score_factor = 1.0
+
 	var gravity_force = (to_center.normalized() * gravity_constant * score_factor) / max(distance_sq, 1000.0)
 	var total_pull = gravity_force + (to_center.normalized() * ambient_pull * score_factor)
 	velocity += total_pull * delta
