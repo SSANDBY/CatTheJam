@@ -45,11 +45,14 @@ func _process(delta):
 	if moulinette_timer <= 0:
 		spawn_moulinette()
 		if is_phase_2:
+			spawn_moulinette()
 			var loop_level = main.loop_level if "loop_level" in main else 0
 			if loop_level == 0:
 				moulinette_timer = randf_range(3.0, 5.0)
-			else:
+			elif loop_level == 1:
 				moulinette_timer = randf_range(1.5, 3.0)
+			else:
+				moulinette_timer = randf_range(0.8, 1.5)
 		else:
 			moulinette_timer = randf_range(4.0, 7.0)
 

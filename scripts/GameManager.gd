@@ -48,6 +48,7 @@ var pedago_scene = preload("res://scenes/Pedago.tscn")
 func start_phase_2():
 	if is_pedago_phase: return
 	is_pedago_phase = true
+	is_phase_3 = false
 	
 	var hud = get_node_or_null("HUD")
 	if hud:
@@ -92,6 +93,10 @@ func start_phase_2():
 	
 	alarm_timer = 3.0
 	
+	var norminettes = get_tree().get_nodes_in_group("norminettes")
+	for n in norminettes:
+		PoolManager.return_instance(n)
+
 	var player_p2 = get_tree().root.find_child("Player", true, false)
 	if player_p2:
 		player_p2.mana = player_p2.max_mana

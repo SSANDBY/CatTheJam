@@ -39,8 +39,10 @@ func _physics_process(delta):
 	if is_phase_3:
 		var player = get_tree().root.find_child("Player", true, false)
 		if player:
+			var loop_level = main.loop_level if "loop_level" in main else 0
+			var chase_speed = clamp(0.5 + loop_level * 0.15, 0.5, 0.9)
 			var direction = (player.global_position - global_position).normalized()
-			velocity = direction * speed
+			velocity = direction * (speed * chase_speed)
 			
 		global_position += velocity * delta
 		rotation = velocity.angle()

@@ -86,7 +86,7 @@ func _physics_process(delta):
 	else:
 		is_shielding = false
 		shield_visual.visible = false
-		shield_energy = move_toward(shield_energy, shield_max_energy, 5.0 * delta)
+		shield_energy = move_toward(shield_energy, shield_max_energy, 15.0 * delta)
 	
 	if hud:
 		hud.update_energy(shield_energy, shield_max_energy)
