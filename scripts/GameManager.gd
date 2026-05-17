@@ -6,6 +6,7 @@ var alarm_timer = 0.0
 var phase_2_end_score = 0.0
 var matrix_layer_instance = null
 var is_phase_3 = false
+var loop_level = 0
 
 func _ready():
 	# Set fullscreen on startup
@@ -98,6 +99,11 @@ func end_phase_2():
 	var pedagos = get_tree().get_nodes_in_group("pedagos")
 	for p in pedagos:
 		p.queue_free()
+		
+	loop_level += 1
+	var player = get_tree().root.find_child("Player", true, false)
+	if player and player.has_method("apply_random_buff"):
+		player.apply_random_buff()
 		
 	start_phase_3()
 
