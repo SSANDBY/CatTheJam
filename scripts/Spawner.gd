@@ -44,10 +44,12 @@ func _process(delta):
 	# Moulinette spawning
 	if moulinette_timer <= 0:
 		spawn_moulinette()
-		# Random interval for the next Moulinette
 		if is_phase_2:
-			spawn_moulinette() # Spawn 2 at once during pedago phase
-			moulinette_timer = randf_range(0.5, 1.0)
+			var loop_level = main.loop_level if "loop_level" in main else 0
+			if loop_level == 0:
+				moulinette_timer = randf_range(3.0, 5.0)
+			else:
+				moulinette_timer = randf_range(1.5, 3.0)
 		else:
 			moulinette_timer = randf_range(4.0, 7.0)
 
