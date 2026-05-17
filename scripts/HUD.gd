@@ -6,7 +6,7 @@ extends CanvasLayer
 var score = 0.0
 
 func _process(delta):
-	score += delta
+	score += 10.0 * delta
 	score_label.text = "SCORE: " + str(int(score))
 
 func update_energy(value, max_value):

@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://dj4n1meteorxx"]
+
+[ext_resource type="Script" path="res://scripts/Meteor.gd" id="1_script"]
+[ext_resource type="Material" uid="uid://b000firemat0" path="res://models/fire_material.tres" id="2_mat"]
+[ext_resource type="Texture2D" uid="uid://c000asteroid" path="res://models/asteroid1.png" id="3_tex"]
+
+[sub_resource type="Curve" id="Curve_trail"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[node name="Meteor" type="Node2D"]
+script = ExtResource("1_script")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("3_tex")
+hframes = 7
+vframes = 7
+
+[node name="Trail" type="CPUParticles2D" parent="."]
+show_behind_parent = true
+material = ExtResource("2_mat")
+amount = 40
+lifetime = 0.5
+local_coords = false
+emission_shape = 1
+emission_sphere_radius = 5.0
+gravity = Vector2(0, 0)
+scale_amount_min = 0.05
+scale_amount_max = 0.15
+scale_amount_curve = SubResource("Curve_trail")
+color = Color(1.5, 0.6, 0.1, 0.5)

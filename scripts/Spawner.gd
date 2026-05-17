@@ -2,6 +2,7 @@ extends Node2D
 
 @export var norminette_scene: PackedScene = preload("res://scenes/Norminette.tscn")
 @export var moulinette_scene: PackedScene = preload("res://scenes/Moulinette.tscn")
+@export var pedago_scene: PackedScene = preload("res://scenes/Pedago.tscn")
 
 @export var base_spawn_rate = 1.5
 @export var min_spawn_rate = 0.4
@@ -9,6 +10,7 @@ extends Node2D
 
 var timer = 0.0
 var moulinette_timer = 5.0 # Moulinette starts spawning after 5 seconds
+var pedago_timer = 8.0 # Pedago starts spawning after 8 seconds
 var elapsed_time = 0.0
 
 func _process(delta):
@@ -17,16 +19,30 @@ func _process(delta):
 	moulinette_timer -= delta
 	
 	# Norminette spawning
-	var current_spawn_rate = max(min_spawn_rate, base_spawn_rate - (elapsed_time * difficulty_curve))
-	if timer >= current_spawn_rate:
-		spawn_norminette(elapsed_time)
-		timer = 0.0
+	var main = get_parent()
+	var is_phase_2 = "is_pedago_phase" in main and main.is_pedago_phase
+	
+	if not is_phase_2:
+		var current_spawn_rate = max(min_spawn_rate, base_spawn_rate - (elapsed_time * difficulty_curve))
+		if timer >= current_spawn_rate:
+			spawn_norminette(elapsed_time)
+			timer = 0.0
+		
+	# Pedago spawning
+	if not is_phase_2:
+		pedago_timer -= delta
+		if pedago_timer <= 0:
+			spawn_pedago(elapsed_time)
+			pedago_timer = randf_range(10.0, 15.0)
 		
 	# Moulinette spawning
 	if moulinette_timer <= 0:
 		spawn_moulinette()
 		# Random interval for the next Moulinette
-		moulinette_timer = randf_range(8.0, 12.0)
+		if is_phase_2:
+			moulinette_timer = randf_range(0.8, 1.5)
+		else:
+			moulinette_timer = randf_range(8.0, 12.0)
 
 func spawn_norminette(time_factor):
 	if not norminette_scene: return
@@ -54,3 +70,20 @@ func spawn_moulinette():
 	var spawn_dist = 320.0
 	moulinette.global_position = Vector2(640, 360) + Vector2.RIGHT.rotated(angle) * spawn_dist
 	get_parent().add_child(moulinette)
+
+func spawn_pedago(time_factor):
+	if not pedago_scene: return
+	var pedago = pedago_scene.instantiate()
+
+	if pedago.has_method("set_difficulty"):
+		pedago.set_difficulty(time_factor)
+
+	var player = get_tree().root.find_child("Player", true, false)
+	var spawn_radius = 2000.0 # Fallback default
+	if player and "max_orbit_radius" in player:
+		spawn_radius = player.max_orbit_radius + 150.0
+		
+	var angle = randf() * TAU
+	var spawn_pos = Vector2(640, 360) + Vector2.RIGHT.rotated(angle) * spawn_radius
+	pedago.global_position = spawn_pos
+	get_parent().add_child(pedago)

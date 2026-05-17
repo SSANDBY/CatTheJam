@@ -35,9 +35,31 @@ var shield_energy = 100.0
 func _ready():
 	sword_area.monitoring = false
 	shield_visual.visible = false
+	
+	var grad = Gradient.new()
+	grad.set_color(0, Color(1.0, 0.9, 0.2, 1.0)) # Parlak sarı/turuncu
+	grad.set_color(1, Color(1.0, 0.2, 0.0, 0.0)) # Kırmızıya dönüp silinme
+	
+	var jetpack_left = get_parent().get_node_or_null("JetpackLayer/JetpackContainer/JetpackLeft")
+	var jetpack_right = get_parent().get_node_or_null("JetpackLayer/JetpackContainer/JetpackRight")
+	
+	if jetpack_left:
+		jetpack_left.color_ramp = grad
+		jetpack_left.angle_min = 0.0
+		jetpack_left.angle_max = 360.0
+	if jetpack_right:
+		jetpack_right.color_ramp = grad
+		jetpack_right.angle_min = 0.0
+		jetpack_right.angle_max = 360.0
 
 func _physics_process(delta):
+	var jetpack_left = get_parent().get_node_or_null("JetpackLayer/JetpackContainer/JetpackLeft")
+	var jetpack_right = get_parent().get_node_or_null("JetpackLayer/JetpackContainer/JetpackRight")
+	
 	if is_dashing:
+		if jetpack_left: 
+			jetpack_left.emitting = true
+			jetpack_right.emitting = true
 		dash_timer -= delta
 		if dash_timer <= 0:
 			is_dashing = false
@@ -59,9 +81,15 @@ func _physics_process(delta):
 		hud.update_energy(shield_energy, shield_max_energy)
 		
 		# Update dynamic max_orbit_radius based on score
-		# Shrinks from 2000 to 220 between score 0 and 100
-		var score_progress = clamp(hud.score / 100.0, 0.0, 1.0)
-		max_orbit_radius = lerp(2000.0, target_max_orbit_radius, score_progress)
+		var main = get_parent()
+		var is_phase_2 = "is_pedago_phase" in main and main.is_pedago_phase
+		
+		if is_phase_2:
+			max_orbit_radius = target_max_orbit_radius * 3.0
+		else:
+			# Shrinks from 2000 to 220 between score 0 and 100
+			var score_progress = clamp(hud.score / 100.0, 0.0, 1.0)
+			max_orbit_radius = lerp(2000.0, target_max_orbit_radius, score_progress)
 		
 		# Update CenterCircle visual
 		var center_circle = get_parent().get_node_or_null("CenterCircle")
@@ -98,6 +126,15 @@ func _physics_process(delta):
 	var rotation_speed = 10.0
 	rotation = lerp_angle(rotation, target_rotation, rotation_speed * delta)
 
+	# Z-Depth / Rendering sıralaması (Karakter arkasını dönünce alevler üstte olmalı)
+	var facing_away = sin(rotation) < -0.1
+	var jetpack_layer = get_parent().get_node_or_null("JetpackLayer")
+	if jetpack_layer:
+		if facing_away:
+			jetpack_layer.layer = 1
+		else:
+			jetpack_layer.layer = 0
+
 	# Dash check
 	if Input.is_action_just_pressed("dash") and input_vector != Vector2.ZERO:
 		start_dash(input_vector)
@@ -106,15 +143,27 @@ func _physics_process(delta):
 	# Movement logic with inertia
 	if input_vector != Vector2.ZERO:
 		velocity = velocity.move_toward(input_vector * speed, acceleration * delta)
+		if jetpack_left: 
+			jetpack_left.emitting = true
+			jetpack_right.emitting = true
 	else:
 		velocity = velocity.move_toward(Vector2.ZERO, friction * delta)
+		if jetpack_left: 
+			jetpack_left.emitting = false
+			jetpack_right.emitting = false
 	
 	# Gravity Logic
 	var to_center = black_hole_pos - global_position
 	var distance_sq = to_center.length_squared()
 	
 	# Scale gravity with score
+	var main = get_parent()
+	var is_phase_2 = "is_pedago_phase" in main and main.is_pedago_phase
+	
 	var score_factor = 1.0 + (hud.score * 0.02) if hud else 1.0
+	if is_phase_2:
+		score_factor = 1.0
+
 	var gravity_force = (to_center.normalized() * gravity_constant * score_factor) / max(distance_sq, 1000.0)
 	var total_pull = gravity_force + (to_center.normalized() * ambient_pull * score_factor)
 	velocity += total_pull * delta
