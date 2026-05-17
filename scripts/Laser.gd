@@ -10,7 +10,6 @@ func on_reuse():
 	timer = 0.0
 	visible = true
 	set_process(true)
-	velocity = Vector2.RIGHT.rotated(global_rotation) * speed
 
 func on_return():
 	visible = false
@@ -20,6 +19,10 @@ func _ready():
 	velocity = Vector2.RIGHT.rotated(global_rotation) * speed
 
 func _process(delta):
+	# Update velocity based on rotation if it's not set (for pooled instances)
+	if velocity == Vector2.ZERO:
+		velocity = Vector2.RIGHT.rotated(global_rotation) * speed
+		
 	global_position += velocity * delta
 	timer += delta
 	if timer >= lifetime:

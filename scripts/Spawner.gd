@@ -30,7 +30,12 @@ func _process(delta):
 		
 	# Pedago spawning
 	var is_looping = "loop_level" in main and main.loop_level > 0
-	if not is_phase_2 and not is_looping:
+	var hud = main.get_node_or_null("HUD")
+	var can_spawn_pedago = not is_phase_2 and not is_looping
+	if hud and hud.score < 150.0:
+		can_spawn_pedago = false
+		
+	if can_spawn_pedago:
 		pedago_timer -= delta
 		if pedago_timer <= 0:
 			spawn_pedago(elapsed_time)

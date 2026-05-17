@@ -39,7 +39,8 @@ func _process(delta):
 	# DISTANCE SCALING (Consistent with Norminette)
 	var to_center = Vector2(640, 360) - global_position
 	var distance = to_center.length()
-	var base_scale = clamp(distance / 500.0, 0.2, 1.0)
+	# Ensure base_scale is never too small to be invisible
+	var base_scale = clamp(distance / 500.0, 0.4, 1.2)
 	scale = Vector2(base_scale, base_scale)
 	
 	timer -= delta
