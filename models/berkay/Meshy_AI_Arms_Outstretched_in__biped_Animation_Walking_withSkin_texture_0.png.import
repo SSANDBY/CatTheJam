@@ -2,14 +2,11 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://chp27682duovq"
+uid="uid://b4xsqjty0dwf7"
 path.s3tc="res://.godot/imported/Meshy_AI_Arms_Outstretched_in__biped_Animation_Walking_withSkin_texture_0.png-593919049c8150f3f6987483ba85c911.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
-}
-generator_parameters={
-"md5": "77f0f12ed36e3218717d4d4b179747fe"
 }
 
 [deps]
