@@ -12,8 +12,10 @@ extends Node
 var proxy: Node3D
 var current_rotation: float = 0.0
 var current_tilt: float = 0.0
+var _cam2d: Node = null
 
 func _ready():
+	_cam2d = get_tree().root.find_child("MainCamera", true, false)
 	var world = get_tree().root.find_child("World3D", true, false)
 	if world and model_scene:
 		proxy = model_scene.instantiate()
@@ -62,11 +64,14 @@ func _process(delta):
 	if proxy and get_parent() is Node2D:
 		var p = get_parent()
 		
-		# 2.5D X-Z DÜZLEMİ EŞLEMESİ (Yer düzlemi):
-		# 2D X -> 3D X
-		# 2D Y -> 3D Z (Derinlik)
-		# 3D Y -> vertical_offset (Sabit yükseklik - asla değişmez, itilmeyi önler)
-		proxy.global_position = Vector3(p.global_position.x + position_offset.x, vertical_offset, p.global_position.y + position_offset.y)
+		# 2.5D X-Z mapping with 45-degree camera correction.
+		# The camera looks down at 45°, so 3D Z appears compressed by cos(45°)=0.707 on screen.
+		# Multiplying the Z offset from camera center by sqrt(2) corrects the alignment so
+		# 3D models land at the exact same screen pixel as their 2D counterparts.
+		var cam2d_y = _cam2d.global_position.y if _cam2d else 360.0
+		var obj_y = p.global_position.y + position_offset.y
+		var adjusted_z = cam2d_y + sqrt(2.0) * (obj_y - cam2d_y)
+		proxy.global_position = Vector3(p.global_position.x + position_offset.x, vertical_offset, adjusted_z)
 		
 		if is_flat:
 			proxy.rotation.x = deg_to_rad(90)
@@ -92,6 +97,10 @@ func _process(delta):
 				current_tilt = lerp(current_tilt, target_tilt, delta * tilt_speed)
 				proxy.rotation.z = current_tilt
 
+func _enter_tree():
+	if proxy:
+		proxy.visible = true
+
 func _exit_tree():
 	if proxy:
-		proxy.queue_free()
+		proxy.visible = false

@@ -12,17 +12,17 @@ func set_difficulty(time_factor):
 	speed *= difficulty_multiplier
 
 func on_reuse():
-	# Reset state for pooling
 	velocity = Vector2.ZERO
 	difficulty_multiplier = 1.0
 	gravity_constant = 300000.0
 	speed = 100.0
 	visible = true
+	monitoring = true
 	set_physics_process(true)
 
 func on_return():
-	# Prepare for pooling
 	visible = false
+	monitoring = false
 	set_physics_process(false)
 
 func _ready():

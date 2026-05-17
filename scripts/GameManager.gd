@@ -51,10 +51,7 @@ func start_phase_2():
 	
 	var hud = get_node_or_null("HUD")
 	if hud:
-		if loop_level == 0:
-			phase_2_end_score = hud.score + 100.0
-		else:
-			phase_2_end_score = hud.score + 50.0
+		phase_2_end_score = hud.score + 50.0
 	else:
 		phase_2_end_score = 999999.0
 	
@@ -95,6 +92,11 @@ func start_phase_2():
 	
 	alarm_timer = 3.0
 	
+	var player_p2 = get_tree().root.find_child("Player", true, false)
+	if player_p2:
+		player_p2.mana = player_p2.max_mana
+		player_p2.shield_energy = player_p2.shield_max_energy
+
 	var existing_pedagos = get_tree().get_nodes_in_group("pedagos")
 	if existing_pedagos.size() == 0:
 		var p = pedago_scene.instantiate()
@@ -122,8 +124,11 @@ func end_phase_2():
 		
 	loop_level += 1
 	var player = get_tree().root.find_child("Player", true, false)
-	if player and player.has_method("apply_random_buff"):
-		player.apply_random_buff()
+	if player:
+		player.mana = player.max_mana
+		player.shield_energy = player.shield_max_energy
+		if player.has_method("apply_random_buff"):
+			player.apply_random_buff()
 		
 	start_phase_3()
 

@@ -178,7 +178,7 @@ func _physics_process(delta):
 	mana = move_toward(mana, max_mana, mana_regen * delta)
 	
 	# Potion System
-	if Input.is_action_just_pressed("potion_mana") or Input.is_key_pressed(KEY_Q):
+	if Input.is_action_just_pressed("potion_mana"):
 		if Api42.potions > 0:
 			if mana < max_mana:
 				Api42.potions -= 1
@@ -190,7 +190,7 @@ func _physics_process(delta):
 		else:
 			print("No potions left!")
 			
-	if Input.is_action_just_pressed("potion_energy") or Input.is_key_pressed(KEY_E):
+	if Input.is_action_just_pressed("potion_energy"):
 		if Api42.potions > 0:
 			if shield_energy < shield_max_energy:
 				Api42.potions -= 1

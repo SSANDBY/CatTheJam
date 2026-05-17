@@ -32,7 +32,7 @@ func _process(delta):
 	var is_looping = "loop_level" in main and main.loop_level > 0
 	var hud = main.get_node_or_null("HUD")
 	var can_spawn_pedago = not is_phase_2 and not is_looping
-	if hud and hud.score < 150.0:
+	if hud and hud.score < 100.0:
 		can_spawn_pedago = false
 		
 	if can_spawn_pedago:

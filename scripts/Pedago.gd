@@ -15,14 +15,12 @@ func on_reuse():
 	difficulty_multiplier = 1.0
 	speed = 120.0
 	visible = true
+	monitoring = true
 	set_physics_process(true)
-	# Reset collision scale
-	var col = get_node_or_null("CollisionShape2D")
-	if col:
-		col.scale = Vector2(1.0, 1.0)
 
 func on_return():
 	visible = false
+	monitoring = false
 	set_physics_process(false)
 
 func _ready():
@@ -54,34 +52,18 @@ func _physics_process(delta):
 			if main and main.has_method("start_phase_2"):
 				main.start_phase_2()
 	else:
-		# Reached center, now chase player!
-		scale = Vector2(8.0, 8.0)
-		# Counter-scale the collision shape so the hitbox stays small
-		var col = get_node_or_null("CollisionShape2D")
-		if col:
-			col.scale = Vector2(0.1, 0.1)
 		var player = get_tree().root.find_child("Player", true, false)
 		if player:
 			var direction = (player.global_position - global_position).normalized()
-			# Move a bit slower than its initial speed
-			velocity = direction * (speed * 0.7)
+			velocity = direction * (speed * 0.35)
 			global_position += velocity * delta
 			rotation = velocity.angle()
 
 
 func _on_body_entered(body):
 	if body.name == "Player":
-		if body.has_method("is_shielding") and body.is_shielding:
-			# Player is shielding, Berkay dies instead
-			print("Berkay defeated by shield!")
-			PoolManager.return_instance(self)
-			return
-		
-		# Double check if player is shielding (just in case variable name differs)
 		if "is_shielding" in body and body.is_shielding:
-			print("Berkay defeated by shield (fallback)!")
 			PoolManager.return_instance(self)
 			return
 
-		print("Player hit by Pedago!")
 		GameManager.game_over()

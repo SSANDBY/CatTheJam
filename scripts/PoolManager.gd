@@ -25,20 +25,20 @@ func get_instance(scene: PackedScene) -> Node:
 func return_instance(instance: Node):
 	var id = instance.get_instance_id()
 	if not active_objects.has(id):
-		# If it's not from a pool, just free it (fallback)
 		instance.queue_free()
 		return
-		
+
 	var path = active_objects[id]
-	
-	# Reset state if needed
+
+	if pools.has(path) and instance in pools[path]:
+		return
+
 	if instance.has_method("on_return"):
 		instance.on_return()
-	
-	# Remove from parent if it has one
+
 	if instance.get_parent():
 		instance.get_parent().remove_child(instance)
-		
+
 	pools[path].append(instance)
 
 func cleanup_pool(path: String):

@@ -8,6 +8,7 @@ var timer = 0.0
 
 func on_reuse():
 	timer = 0.0
+	velocity = Vector2.ZERO
 	visible = true
 	set_process(true)
 
