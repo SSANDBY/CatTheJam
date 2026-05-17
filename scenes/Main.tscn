@@ -143,14 +143,13 @@ color = Color(0.2, 0.6, 1, 1)
 [node name="RemoteTransform2D" type="RemoteTransform2D" parent="Player" unique_id=489471146]
 remote_path = NodePath("../../JetpackLayer/JetpackContainer")
 update_scale = false
+
 [node name="Proxy3D" type="Node" parent="Player" unique_id=413674480]
 script = ExtResource("4_script")
 model_scene = ExtResource("5_scene")
 rotation_offset = 1.5708
-vertical_offset = 0.0
 tilt_speed = 10.0
 position_offset = Vector2(0, 50)
-
 
 [node name="SwordArea" type="Area2D" parent="Player" unique_id=992390531]
 visible = false

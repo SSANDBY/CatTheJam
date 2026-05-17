@@ -43,7 +43,7 @@ func _on_me_loaded(data: Dictionary):
 	
 	# Wait a moment before starting the game
 	await get_tree().create_timer(1.0).timeout
-	get_tree().change_scene_to_file("res://scenes/Main.tscn")
+	get_tree().change_scene_to_file("res://scenes/MainMenu.tscn")
 
 func _on_error(message: String):
 	status_label.text = "Error: " + message

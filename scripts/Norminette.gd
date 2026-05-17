@@ -71,4 +71,4 @@ func _on_body_entered(body):
 			PoolManager.return_instance(self)
 			return
 		print("Player hit by Norminette!")
-		get_tree().reload_current_scene()
+		GameManager.game_over()

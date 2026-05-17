@@ -8,6 +8,7 @@ var matrix_layer_instance = null
 var is_phase_3 = false
 var loop_level = 0
 var normal_phase_end_score = 0.0
+var last_score = 0
 
 func _ready():
 	# Set fullscreen on startup
@@ -126,10 +127,11 @@ func end_phase_2():
 		
 	start_phase_3()
 
-func start_phase_3():
-	is_phase_3 = true
-	var hud = get_node_or_null("HUD")
+func game_over():
+	var hud = get_tree().root.find_child("HUD", true, false)
 	if hud:
-		normal_phase_end_score = hud.score + 100.0
-	else:
-		normal_phase_end_score = 999999.0
+		last_score = int(hud.score)
+	
+	# Wait a bit then change scene
+	await get_tree().create_timer(0.5).timeout
+	get_tree().change_scene_to_file("res://scenes/GameOver.tscn")

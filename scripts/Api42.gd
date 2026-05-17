@@ -31,7 +31,6 @@ var potions       : int    = 0
 # ================================================================
 #  PUBLIC API
 # ================================================================
-...
 func fetch_daily_logtime() -> void:
 	var http := HTTPRequest.new()
 	add_child(http)

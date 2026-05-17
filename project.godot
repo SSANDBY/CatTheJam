@@ -23,6 +23,7 @@ config/icon="res://icon.svg"
 
 PoolManager="*res://scripts/PoolManager.gd"
 Api42="*res://scripts/Api42.gd"
+GameManager="*res://scripts/GameManager.gd"
 
 [display]
 
