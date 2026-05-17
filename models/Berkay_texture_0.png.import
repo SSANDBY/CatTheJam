@@ -2,20 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bfoet2cr1m85i"
-path.s3tc="res://.godot/imported/Moulinette_normal.png-a6ec776072ed16021d9f5a44140d5ddb.s3tc.ctex"
+uid="uid://cx15v33r1gvba"
+path.s3tc="res://.godot/imported/Berkay_texture_0.png-029e22b582db864701dce356a16dab74.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
 generator_parameters={
-"md5": "474301aca2f9fb62ab1b31cf04c06af4"
+"md5": "4b9d6df546cdb9fd44f44921bfc18924"
 }
 
 [deps]
 
-source_file="res://models/Moulinette_normal.png"
-dest_files=["res://.godot/imported/Moulinette_normal.png-a6ec776072ed16021d9f5a44140d5ddb.s3tc.ctex"]
+source_file="res://models/Berkay_texture_0.png"
+dest_files=["res://.godot/imported/Berkay_texture_0.png-029e22b582db864701dce356a16dab74.s3tc.ctex"]
 
 [params]
 
@@ -25,12 +25,12 @@ compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
-compress/normal_map=1
+compress/normal_map=0
 compress/channel_pack=0
 mipmaps/generate=true
 mipmaps/limit=-1
-roughness/mode=1
-roughness/src_normal="res://models/Moulinette_normal.png"
+roughness/mode=0
+roughness/src_normal=""
 process/channel_remap/red=0
 process/channel_remap/green=1
 process/channel_remap/blue=2

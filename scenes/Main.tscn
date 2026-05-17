@@ -148,6 +148,7 @@ update_scale = false
 script = ExtResource("4_script")
 model_scene = ExtResource("5_scene")
 rotation_offset = 1.5708
+vertical_offset = -45.0
 tilt_speed = 10.0
 
 [node name="SwordArea" type="Area2D" parent="Player" unique_id=992390531]
