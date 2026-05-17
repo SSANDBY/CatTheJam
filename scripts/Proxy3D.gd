@@ -56,6 +56,8 @@ func _ready():
 	else:
 		push_warning("Proxy3D: World3D or model_scene missing!")
 
+@export var position_offset: Vector2 = Vector2.ZERO
+
 func _process(delta):
 	if proxy and get_parent() is Node2D:
 		var p = get_parent()
@@ -64,7 +66,7 @@ func _process(delta):
 		# 2D X -> 3D X
 		# 2D Y -> 3D Z (Derinlik)
 		# 3D Y -> vertical_offset (Sabit yükseklik - asla değişmez, itilmeyi önler)
-		proxy.global_position = Vector3(p.global_position.x, vertical_offset, p.global_position.y)
+		proxy.global_position = Vector3(p.global_position.x + position_offset.x, vertical_offset, p.global_position.y + position_offset.y)
 		
 		if is_flat:
 			proxy.rotation.x = deg_to_rad(90)
