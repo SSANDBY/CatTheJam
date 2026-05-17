@@ -48,5 +48,8 @@ func _physics_process(delta):
 
 func _on_body_entered(body):
 	if body.name == "Player":
+		if body.is_shielding:
+			queue_free()
+			return
 		print("Player hit by Pedago!")
 		get_tree().reload_current_scene()

@@ -70,7 +70,7 @@ func _physics_process(delta):
 	# Shield logic (Right Click or K)
 	if (Input.is_action_pressed("defend") or Input.is_key_pressed(KEY_K)) and shield_energy > 0:
 		is_shielding = true
-		shield_energy -= 40.0 * delta
+		shield_energy = max(0.0, shield_energy - 40.0 * delta)
 		shield_visual.visible = true
 	else:
 		is_shielding = false
