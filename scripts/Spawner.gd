@@ -9,7 +9,7 @@ extends Node2D
 @export var difficulty_curve = 0.05 
 
 var timer = 0.0
-var moulinette_timer = 5.0 # Moulinette starts spawning after 5 seconds
+var moulinette_timer = 3.0 # Moulinette starts spawning after 3 seconds
 var pedago_timer = 8.0 # Pedago starts spawning after 8 seconds
 var elapsed_time = 0.0
 
@@ -29,7 +29,8 @@ func _process(delta):
 			timer = 0.0
 		
 	# Pedago spawning
-	if not is_phase_2:
+	var is_looping = "loop_level" in main and main.loop_level > 0
+	if not is_phase_2 and not is_looping:
 		pedago_timer -= delta
 		if pedago_timer <= 0:
 			spawn_pedago(elapsed_time)
@@ -40,9 +41,10 @@ func _process(delta):
 		spawn_moulinette()
 		# Random interval for the next Moulinette
 		if is_phase_2:
-			moulinette_timer = randf_range(0.8, 1.5)
+			spawn_moulinette() # Spawn 2 at once during pedago phase
+			moulinette_timer = randf_range(0.5, 1.0)
 		else:
-			moulinette_timer = randf_range(8.0, 12.0)
+			moulinette_timer = randf_range(4.0, 7.0)
 
 func spawn_norminette(time_factor):
 	if not norminette_scene: return

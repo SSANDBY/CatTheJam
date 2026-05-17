@@ -73,9 +73,9 @@ func _physics_process(delta):
 		return
 
 	# Shield logic (Right Click or K)
-	if (Input.is_action_pressed("defend") or Input.is_key_pressed(KEY_K)) and shield_energy > 0:
+	if (Input.is_action_pressed("defend") or Input.is_key_pressed(KEY_K)): # Infinite for testing: and shield_energy > 0
 		is_shielding = true
-		shield_energy -= 40.0 * delta
+		# shield_energy -= 40.0 * delta # Disabled for infinite shield testing
 		shield_visual.visible = true
 	else:
 		is_shielding = false
@@ -291,4 +291,3 @@ func show_buff_text(text):
 	tween.tween_property(label, "position:y", label.position.y - 150, 2.5)
 	tween.parallel().tween_property(label, "modulate:a", 0.0, 2.5)
 	tween.tween_callback(canvas.queue_free)
-

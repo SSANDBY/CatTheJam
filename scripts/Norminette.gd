@@ -27,7 +27,7 @@ func _physics_process(delta):
 			
 		global_position += velocity * delta
 		rotation = velocity.angle()
-		scale = Vector2(1.0, 1.0)
+		scale = Vector2(0.5, 0.5)
 		return
 
 	var to_center = black_hole_pos - global_position
@@ -44,7 +44,7 @@ func _physics_process(delta):
 	
 	# DISTANCE SCALING (Shrink as it gets closer to the black hole)
 	var distance = to_center.length()
-	var base_scale = clamp(distance / 500.0, 0.2, 1.0)
+	var base_scale = clamp(distance / 500.0, 0.15, 0.7)
 	scale = Vector2(base_scale, base_scale)
 
 func _on_body_entered(body):
