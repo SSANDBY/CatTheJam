@@ -172,19 +172,25 @@ func _physics_process(delta):
 	# Potion System
 	if Input.is_action_just_pressed("potion_mana") or Input.is_key_pressed(KEY_Q):
 		if Api42.potions > 0:
-			Api42.potions -= 1
-			mana = max_mana
-			if hud: hud.update_potions(Api42.potions)
-			show_buff_text("Mana Full!")
+			if mana < max_mana:
+				Api42.potions -= 1
+				mana = max_mana
+				if hud: hud.update_potions(Api42.potions)
+				show_buff_text("Mana Restored!")
+			else:
+				show_buff_text("Mana Full!")
 		else:
 			print("No potions left!")
 			
 	if Input.is_action_just_pressed("potion_energy") or Input.is_key_pressed(KEY_E):
 		if Api42.potions > 0:
-			Api42.potions -= 1
-			shield_energy = shield_max_energy
-			if hud: hud.update_potions(Api42.potions)
-			show_buff_text("Energy Full!")
+			if shield_energy < shield_max_energy:
+				Api42.potions -= 1
+				shield_energy = shield_max_energy
+				if hud: hud.update_potions(Api42.potions)
+				show_buff_text("Energy Restored!")
+			else:
+				show_buff_text("Energy Full!")
 		else:
 			print("No potions left!")
 	
