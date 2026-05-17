@@ -15,6 +15,11 @@ func _ready():
 	# Initial UI state
 	status_label.text = "WELCOME TO CAT THE JAM\nPlease login with 42 to start the descent."
 
+func _input(event):
+	# ESC to close the game
+	if event.is_action_pressed("ui_cancel") or (event is InputEventKey and event.keycode == KEY_ESCAPE):
+		get_tree().quit()
+
 func _on_login_button_pressed():
 	login_button.disabled = true
 	status_label.text = "Redirecting to 42 Intra..."
