@@ -66,6 +66,7 @@ func check_oauth_return() -> void:
 
 func fetch_daily_logtime() -> void:
 	var http := HTTPRequest.new()
+	http.accept_gzip = false # Web'de tarayıcı zaten açtığı için Godot'un tekrar denemesini engeller
 	add_child(http)
 	http.request_completed.connect(_on_logtime_response.bind(http))
 	var url = SUPABASE_URL + "/functions/v1/" + EDGE_FN_NAME
@@ -99,6 +100,7 @@ func _on_logtime_response(_result: int, code: int, _headers: Array, body: Packed
 
 func _exchange_code_via_supabase(code: String) -> void:
 	var http := HTTPRequest.new()
+	http.accept_gzip = false # Web'de tarayıcı zaten açtığı için Godot'un tekrar denemesini engeller
 	add_child(http)
 	http.request_completed.connect(_on_token_response.bind(http))
 	var url     = SUPABASE_URL + "/functions/v1/" + EDGE_FN_NAME
@@ -133,6 +135,7 @@ func _on_token_response(result: int, code: int, _headers: Array, body: PackedByt
 
 func _get_me() -> void:
 	var http := HTTPRequest.new()
+	http.accept_gzip = false # Web'de tarayıcı zaten açtığı için Godot'un tekrar denemesini engeller
 	add_child(http)
 	http.request_completed.connect(_on_me_response.bind(http))
 	var url = SUPABASE_URL + "/functions/v1/" + EDGE_FN_NAME
@@ -165,6 +168,7 @@ func _on_me_response(result: int, code: int, _headers: Array, body: PackedByteAr
 # ================================================================
 func submit_score(login: String, display_name: String, avatar_url: String, score: int) -> void:
 	var http := HTTPRequest.new()
+	http.accept_gzip = false # Web'de tarayıcı zaten açtığı için Godot'un tekrar denemesini engeller
 	add_child(http)
 	http.request_completed.connect(_on_score_submitted.bind(http))
 	var url     = SUPABASE_URL + "/rest/v1/scores"
@@ -202,6 +206,7 @@ func _on_score_submitted(result, code, _headers, body, http):
 func fetch_leaderboard() -> void:
 	print("Fetching leaderboard from Supabase...")
 	var http := HTTPRequest.new()
+	http.accept_gzip = false # Web'de tarayıcı zaten açtığı için Godot'un tekrar denemesini engeller
 	add_child(http)
 	http.request_completed.connect(_on_leaderboard.bind(http))
 	var url     = SUPABASE_URL + "/rest/v1/scores?select=login,display_name,avatar_url,score&order=score.desc&limit=10"
