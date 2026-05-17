@@ -12,6 +12,8 @@ var normal_phase_end_score = 0.0
 func _ready():
 	# Set fullscreen on startup
 	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+	# OAuth callback'ten döndüysek code'u yakala
+	Api42.check_oauth_return()
 
 func _input(event):
 	# ESC to close the game
