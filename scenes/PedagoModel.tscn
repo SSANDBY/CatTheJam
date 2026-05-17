@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scripts/PedagoModel.gd" id="1_script"]
-[ext_resource type="PackedScene" path="res://models/berkay/Meshy_AI_Arms_Outstretched_in__biped_Animation_Walking_withSkin.glb" id="2_glb"]
+[ext_resource type="PackedScene" uid="uid://df7k7w8v8n7p4" path="res://models/berkay.glb" id="2_glb"]
 
 [node name="PedagoModel" type="Node3D"]
 script = ExtResource("1_script")

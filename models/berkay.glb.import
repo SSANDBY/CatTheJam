@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://bjp8fkod3a5f1"
-path="res://.godot/imported/Meshy_AI_Arms_Outstretched_in__biped_Animation_Walking_withSkin.glb-b579dcc348564ffac5557ac6a8402afd.scn"
+uid="uid://domw3h64r8npr"
+path="res://.godot/imported/berkay.glb-fb07e238abdf88dbd26675d7dae5fc94.scn"
 
 [deps]
 
-source_file="res://models/berkay/Meshy_AI_Arms_Outstretched_in__biped_Animation_Walking_withSkin.glb"
-dest_files=["res://.godot/imported/Meshy_AI_Arms_Outstretched_in__biped_Animation_Walking_withSkin.glb-b579dcc348564ffac5557ac6a8402afd.scn"]
+source_file="res://models/berkay.glb"
+dest_files=["res://.godot/imported/berkay.glb-fb07e238abdf88dbd26675d7dae5fc94.scn"]
 
 [params]
 
