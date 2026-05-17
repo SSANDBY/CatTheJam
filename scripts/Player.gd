@@ -152,9 +152,15 @@ func _physics_process(delta):
 			jetpack_layer.layer = 0
 
 	# Dash check
+	if dash_cooldown_timer > 0:
+		dash_cooldown_timer -= delta
+
 	if Input.is_action_just_pressed("dash") and input_vector != Vector2.ZERO:
-		start_dash(input_vector)
-		return
+		if mana >= dash_mana_cost and dash_cooldown_timer <= 0:
+			mana -= dash_mana_cost
+			dash_cooldown_timer = dash_cooldown
+			start_dash(input_vector)
+			return
 
 	# Movement logic with inertia
 	if input_vector != Vector2.ZERO:
