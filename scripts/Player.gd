@@ -21,12 +21,16 @@ var dash_timer = 0.0
 @export var sword_duration = 1.0 # Max 1 second
 @export var sword_cooldown = 3.0 # 3 seconds wait
 @export var shield_max_energy = 100.0
+@export var max_mana = 100.0
+@export var mana_regen = 20.0
+@export var dash_mana_cost = 33.0
 
 var is_attacking = false
 var attack_timer = 0.0
 var attack_cooldown_timer = 0.0
 var is_shielding = false
 var shield_energy = 100.0
+var mana = 100.0
 
 var projectile_count = 1
 var projectile_speed_mult = 1.0
@@ -165,6 +169,21 @@ func _physics_process(delta):
 	# Mana regeneration
 	mana = move_toward(mana, max_mana, mana_regen * delta)
 	
+	# Potion System
+	if Input.is_action_just_pressed("potion_mana") or Input.is_key_pressed(KEY_Q):
+		if Api42.potions > 0 and mana < max_mana:
+			Api42.potions -= 1
+			mana = max_mana
+			if hud: hud.update_potions(Api42.potions)
+			show_buff_text("Mana Restored!")
+			
+	if Input.is_action_just_pressed("potion_energy") or Input.is_key_pressed(KEY_E):
+		if Api42.potions > 0 and shield_energy < shield_max_energy:
+			Api42.potions -= 1
+			shield_energy = shield_max_energy
+			if hud: hud.update_potions(Api42.potions)
+			show_buff_text("Energy Restored!")
+	
 	# Gravity Logic
 	var to_center = black_hole_pos - global_position
 	var distance_sq = to_center.length_squared()
@@ -296,6 +315,3 @@ func show_buff_text(text):
 	tween.tween_property(label, "position:y", label.position.y - 150, 2.5)
 	tween.parallel().tween_property(label, "modulate:a", 0.0, 2.5)
 	tween.tween_callback(canvas.queue_free)
-en_callback(canvas.queue_free)
-nvas.queue_free)
-en_callback(canvas.queue_free)

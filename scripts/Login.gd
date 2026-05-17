@@ -4,6 +4,12 @@ extends Control
 @onready var login_button: Button = $CenterContainer/VBoxContainer/LoginButton
 
 func _ready():
+	# If running from Editor, skip login for easier testing
+	if OS.has_feature("editor"):
+		print("Editor detected: Bypassing login.")
+		get_tree().change_scene_to_file("res://scenes/Main.tscn")
+		return
+
 	# Connect Api42 signals
 	Api42.me_loaded.connect(_on_me_loaded)
 	Api42.api_error.connect(_on_error)
@@ -31,6 +37,9 @@ func _on_token_ready(_token: String):
 func _on_me_loaded(data: Dictionary):
 	var login = data.get("login", "unknown")
 	status_label.text = "Hello, " + login + "!\nPreparing your mission..."
+	
+	# Fetch daily logtime to calculate potions
+	Api42.fetch_daily_logtime()
 	
 	# Wait a moment before starting the game
 	await get_tree().create_timer(1.0).timeout

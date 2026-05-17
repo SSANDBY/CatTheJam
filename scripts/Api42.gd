@@ -26,11 +26,43 @@ signal leaderboard_loaded(data: Array)
 var _access_token : String = ""
 var _user_id      : int    = 0
 var current_login : String = "Guest"
-
+var potions       : int    = 0
 
 # ================================================================
 #  PUBLIC API
 # ================================================================
+...
+func fetch_daily_logtime() -> void:
+	var http := HTTPRequest.new()
+	add_child(http)
+	http.request_completed.connect(_on_logtime_response.bind(http))
+	
+	var url = SUPABASE_URL + "/functions/v1/" + EDGE_FN_NAME
+	var headers = [
+		"Content-Type: application/json",
+		"apikey: " + SUPABASE_KEY,
+		"Authorization: Bearer " + SUPABASE_KEY,
+	]
+	
+	var body = JSON.stringify({
+		"action": "get_logtime",
+		"access_token": _access_token,
+		"user_id": _user_id
+	})
+	
+	http.request(url, headers, HTTPClient.METHOD_POST, body)
+
+func _on_logtime_response(result: int, code: int, _headers: Array,
+						  body: PackedByteArray, http: HTTPRequest) -> void:
+	http.queue_free()
+	if code == 200:
+		var json := JSON.new()
+		if json.parse(body.get_string_from_utf8()) == OK:
+			var hours = json.get_data().get("hours", 0.0)
+			potions = int(hours)
+			if OS.has_feature("editor"):
+				potions = 5 # Editor'de test için 5 pot verelim
+			emit_signal("logtime_loaded", hours)
 
 func login() -> void:
 	var url := "%s?client_id=%s&redirect_uri=%s&response_type=code&scope=public" \

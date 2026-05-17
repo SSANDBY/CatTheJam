@@ -52,3 +52,12 @@ offset_bottom = 710.0
 theme_override_font_sizes/font_size = 20
 text = "PLAYER: GUEST"
 horizontal_alignment = 2
+
+[node name="PotionLabel" type="Label" parent="."]
+offset_left = 20.0
+offset_top = 550.0
+offset_right = 200.0
+offset_bottom = 580.0
+theme_override_colors/font_color = Color(0.2, 0.8, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "POTIONS: 0 (Q/E)"
