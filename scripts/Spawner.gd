@@ -77,6 +77,11 @@ func spawn_moulinette():
 
 func spawn_pedago(time_factor):
 	if not pedago_scene: return
+	
+	# BERKAY KONTROLÜ: Eğer sahnede zaten bir tane varsa yenisini çıkarma
+	if get_tree().get_nodes_in_group("pedagos").size() > 0:
+		return
+		
 	var pedago = PoolManager.get_instance(pedago_scene)
 
 	if pedago.has_method("set_difficulty"):
