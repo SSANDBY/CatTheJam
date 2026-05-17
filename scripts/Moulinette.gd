@@ -11,6 +11,20 @@ var timer = 0.0
 @onready var warning_line = $WarningLine
 @onready var visual = $Visual
 
+func on_reuse():
+	is_aiming = false
+	timer = randf_range(1.0, 2.0)
+	visible = true
+	set_process(true)
+	if warning_line:
+		warning_line.visible = false
+	if visual:
+		visual.modulate = Color(1, 1, 1)
+
+func on_return():
+	visible = false
+	set_process(false)
+
 func _ready():
 	player = get_tree().root.find_child("Player", true, false)
 	warning_line.visible = false
@@ -49,10 +63,10 @@ func fire_laser():
 	visual.modulate = Color(1, 1, 1)
 	
 	# Spawn laser
-	var laser = laser_scene.instantiate()
+	var laser = PoolManager.get_instance(laser_scene)
 	laser.global_position = global_position
 	laser.global_rotation = global_rotation
 	get_parent().add_child(laser)
 	
 	# Destroy itself after firing as requested
-	queue_free()
+	PoolManager.return_instance(self)

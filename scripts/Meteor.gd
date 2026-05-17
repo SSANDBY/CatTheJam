@@ -10,10 +10,25 @@ extends Node2D
 var velocity: Vector2
 var has_fire: bool = true
 
+func on_reuse():
+	visible = true
+	set_process(true)
+	init_meteor()
+
+func on_return():
+	visible = false
+	set_process(false)
+
 func _ready():
+	init_meteor()
+
+func init_meteor():
 	if not has_fire:
 		$Trail.emitting = false
 		$Trail.visible = false
+	else:
+		$Trail.emitting = true
+		$Trail.visible = true
 		
 	$Sprite2D.texture = texture_atlas
 	$Sprite2D.hframes = h_frames
@@ -34,34 +49,42 @@ func _ready():
 	
 	# Gerçekçi Ateş Gradyanı (Gradient)
 	var grad = Gradient.new()
-	grad.set_color(0, Color(1.0, 0.9, 0.2, 1.0)) # Merkezde parlak sarı/turuncu
-	grad.set_color(1, Color(1.0, 0.2, 0.0, 0.0)) # Dışa doğru kırmızıya dönüp yok oluyor
+	grad.set_color(0, Color(1.0, 0.9, 0.2, 1.0)) 
+	grad.set_color(1, Color(1.0, 0.2, 0.0, 0.0)) 
 	$Trail.color_ramp = grad
 	
-	$Trail.amount = 80 # Daha yoğun
+	$Trail.amount = 80 
 	$Trail.spread = 25.0
 	$Trail.initial_velocity_min = 10.0
 	$Trail.initial_velocity_max = 40.0
 	$Trail.angle_min = 0.0
 	$Trail.angle_max = 360.0
 	
-	# Parçacıklar kare olduğu için (doku olmadığı için) küçük ve dönen kıvılcımlar gibi ayarlıyoruz
 	var scale_multiplier = s / 0.2
 	$Trail.scale_amount_min = 4.0 * scale_multiplier
 	$Trail.scale_amount_max = 12.0 * scale_multiplier
 	$Trail.emission_sphere_radius = 12.0 * scale_multiplier
 	
-	# Büyük taşlarda alevlerin geriye doğru DAHA UZUN bir iz bırakması için:
 	$Trail.lifetime = 0.4 * scale_multiplier
-	$Trail.amount = int(60 * scale_multiplier) # Uzayan ize yetecek kadar yoğunluk
+	$Trail.amount = int(60 * scale_multiplier) 
 	
-	# Çıkış noktasını geriye alma
 	$Trail.position = -dir * (40.0 * s)
 	
-	# Cleanup
-	await get_tree().create_timer(25.0).timeout
-	queue_free()
+	# Lifetime timer
+	reset_lifetime()
+
+func reset_lifetime():
+	# Cancel previous timer if exists by checking if we're in a pool
+	# For pooling, we can use a simple timer in _process
+	current_lifetime = 0.0
+
+var current_lifetime = 0.0
+var max_lifetime = 25.0
 
 func _process(delta):
 	position += velocity * delta
 	$Sprite2D.rotation += 1.0 * delta # Spin
+	
+	current_lifetime += delta
+	if current_lifetime >= max_lifetime:
+		PoolManager.return_instance(self)

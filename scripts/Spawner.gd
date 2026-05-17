@@ -48,10 +48,12 @@ func _process(delta):
 
 func spawn_norminette(time_factor):
 	if not norminette_scene: return
-	var norminette = norminette_scene.instantiate()
+	var norminette = PoolManager.get_instance(norminette_scene)
 
 	if norminette.has_method("set_difficulty"):
 		norminette.set_difficulty(time_factor)
+	if norminette.has_method("init_movement"):
+		norminette.init_movement()
 
 	var player = get_tree().root.find_child("Player", true, false)
 	var spawn_radius = 2000.0 # Fallback default
@@ -66,7 +68,7 @@ func spawn_norminette(time_factor):
 
 func spawn_moulinette():
 	if not moulinette_scene: return
-	var moulinette = moulinette_scene.instantiate()
+	var moulinette = PoolManager.get_instance(moulinette_scene)
 	# Spawn Moulinette at a random point on a circle within view
 	var angle = randf() * TAU
 	var spawn_dist = 320.0
@@ -75,10 +77,12 @@ func spawn_moulinette():
 
 func spawn_pedago(time_factor):
 	if not pedago_scene: return
-	var pedago = pedago_scene.instantiate()
+	var pedago = PoolManager.get_instance(pedago_scene)
 
 	if pedago.has_method("set_difficulty"):
 		pedago.set_difficulty(time_factor)
+	if pedago.has_method("init_movement"):
+		pedago.init_movement()
 
 	var player = get_tree().root.find_child("Player", true, false)
 	var spawn_radius = 2000.0 # Fallback default

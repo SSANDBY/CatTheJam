@@ -249,8 +249,8 @@ func stop_attack():
 			sword_area.visible = false
 
 func _on_sword_area_area_entered(area):
-	if area.is_in_group("norminettes"):
-		area.queue_free()
+	if area.is_in_group("norminettes") or area.is_in_group("pedagos"):
+		PoolManager.return_instance(area)
 
 func apply_random_buff():
 	var buff_types = ["multi", "speed", "firerate", "shield"]

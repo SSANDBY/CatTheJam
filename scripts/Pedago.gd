@@ -9,8 +9,27 @@ func set_difficulty(time_factor):
 	difficulty_multiplier = 1.0 + (time_factor * 0.025)
 	speed *= difficulty_multiplier
 
+func on_reuse():
+	reached_center = false
+	velocity = Vector2.ZERO
+	difficulty_multiplier = 1.0
+	speed = 120.0
+	visible = true
+	set_physics_process(true)
+	# Reset collision scale
+	var col = get_node_or_null("CollisionShape2D")
+	if col:
+		col.scale = Vector2(1.0, 1.0)
+
+func on_return():
+	visible = false
+	set_physics_process(false)
+
 func _ready():
 	add_to_group("pedagos")
+	init_movement()
+
+func init_movement():
 	# Moves exactly towards the center when spawned
 	velocity = (black_hole_pos - global_position).normalized() * speed
 
@@ -32,7 +51,7 @@ func _physics_process(delta):
 			reached_center = true
 			global_position = black_hole_pos
 			var main = get_parent()
-			if main.has_method("start_phase_2"):
+			if main and main.has_method("start_phase_2"):
 				main.start_phase_2()
 	else:
 		# Reached center, now chase player!
@@ -53,7 +72,7 @@ func _physics_process(delta):
 func _on_body_entered(body):
 	if body.name == "Player":
 		if body.is_shielding:
-			queue_free()
+			PoolManager.return_instance(self)
 			return
 		print("Player hit by Pedago!")
 		get_tree().reload_current_scene()

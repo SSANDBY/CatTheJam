@@ -11,8 +11,25 @@ func set_difficulty(time_factor):
 	gravity_constant *= difficulty_multiplier
 	speed *= difficulty_multiplier
 
+func on_reuse():
+	# Reset state for pooling
+	velocity = Vector2.ZERO
+	difficulty_multiplier = 1.0
+	gravity_constant = 300000.0
+	speed = 100.0
+	visible = true
+	set_physics_process(true)
+
+func on_return():
+	# Prepare for pooling
+	visible = false
+	set_physics_process(false)
+
 func _ready():
 	add_to_group("norminettes")
+	init_movement()
+
+func init_movement():
 	velocity = (black_hole_pos - global_position).normalized() * speed
 
 func _physics_process(delta):
@@ -37,7 +54,8 @@ func _physics_process(delta):
 		var gravity_force = (to_center.normalized() * gravity_constant) / distance_sq
 		velocity += gravity_force * delta
 	else:
-		queue_free()
+		PoolManager.return_instance(self)
+		return
 	
 	global_position += velocity * delta
 	rotation = velocity.angle()
@@ -50,7 +68,7 @@ func _physics_process(delta):
 func _on_body_entered(body):
 	if body.name == "Player":
 		if body.is_shielding:
-			queue_free()
+			PoolManager.return_instance(self)
 			return
 		print("Player hit by Norminette!")
 		get_tree().reload_current_scene()
