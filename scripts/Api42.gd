@@ -8,7 +8,7 @@ extends Node
 # ============================================================
 
 const CLIENT_ID      := "u-s4t2ud-0bde3500dcb197e05057409b4ad521d46c70e3ae1a02fb346a3793448e859f84"
-const REDIRECT_URI   := "https://hudayiarici.github.io/CatTheJam/callback.html"
+const REDIRECT_URI   := "https://ssandby.github.io/CatTheJam/callback.html"
 const SUPABASE_URL   := "https://zaxlzvhmflmihyzbvxei.supabase.co"
 const SUPABASE_KEY   := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpheGx6dmhtZmxtaWh5emJ2eGVpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwMzYzNzgsImV4cCI6MjA4NjYxMjM3OH0.Haf84dYUuu-j69MZR9cR1YRjQ6czOJO25JjbjMyE0GY"
 const EDGE_FN_NAME   := "ft-auth"
