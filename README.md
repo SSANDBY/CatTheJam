@@ -54,4 +54,4 @@ Infinite Descent is a fast-paced, space-themed arcade game developed with **Godo
 This project is part of a game jam/prototype series. Feel free to explore and learn!
 
 ---
-*Created with ❤️ by the CatTheJam team.*
+*Created with ❤️ by harici and melmbaz.*
