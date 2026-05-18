@@ -9,9 +9,9 @@ extends Node
 
 const CLIENT_ID      := "u-s4t2ud-172d2295ea6eee6d4e19009e1ed000c520659cb47e18abb5ef800a42cf876353"
 const REDIRECT_URI   := "https://ssandby.github.io/CatTheJam/callback.html"
-const SUPABASE_URL   := "https://zaxlzvhmflmihyzbvxei.supabase.co"
-const SUPABASE_KEY   := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpheGx6dmhtZmxtaWh5emJ2eGVpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwMzYzNzgsImV4cCI6MjA4NjYxMjM3OH0.Haf84dYUuu-j69MZR9cR1YRjQ6czOJO25JjbjMyE0GY"
-const EDGE_FN_NAME   := "ft-auth"
+const SUPABASE_URL   := "https://obmnyfvbrqwxxfedfwut.supabase.co"
+const SUPABASE_KEY   := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9ibW55ZnZicnF3eHhmZWRmd3V0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwODE1ODYsImV4cCI6MjA5NDY1NzU4Nn0.GsfU5q67ToaRJM3Ju11Gy6ZCw_FYgwgwsISntQrFthM"
+const EDGE_FN_NAME   := "smart-action"
 
 const AUTH_URL  := "https://api.intra.42.fr/oauth/authorize"
 const API_BASE  := "https://api.intra.42.fr/v2"
