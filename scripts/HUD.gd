@@ -15,6 +15,12 @@ func _ready():
 	if logtime_label:
 		logtime_label.text = "LOGGED IN TODAY: %.2fh" % Api42.current_logtime
 	update_potions(Api42.potions)
+	Api42.logtime_loaded.connect(_on_logtime_loaded)
+
+func _on_logtime_loaded(hours: float):
+	if logtime_label:
+		logtime_label.text = "LOGGED IN TODAY: %.2fh" % hours
+	update_potions(Api42.potions)
 
 func _process(delta):
 	score += 1.0 * delta
